@@ -1,6 +1,6 @@
 export interface IUser {
-    name: string,
-    email: string,
     username: string,
-    password: string
+    password: string,
+    email: string,
+    tokens?: Map<string, number>
 }

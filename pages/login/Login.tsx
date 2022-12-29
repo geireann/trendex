@@ -81,10 +81,9 @@ export const Login = (props: ILoginProps) => {
           title="Sign Up"
           onPress={() => {
             createUser({
-              name: "Damian",
-              email: email,
               username: username,
-              password: password
+              password: password,
+              email: email
             })
           }}
           color={Color.VARIANT_1}
