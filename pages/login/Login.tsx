@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { StyleSheet, View, Button, Image, Switch } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { Color, FontSize, LoginInput } from '../../global';
+import { createUser } from '../../serverGateway';
 
 export interface ILoginProps {
   setUser: (username: string, password: string) => void,
@@ -14,6 +15,8 @@ export const Login = (props: ILoginProps) => {
     const {navigation, setUser} = props;
 
   const [isSignup, setSignup] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -50,14 +53,14 @@ export const Login = (props: ILoginProps) => {
       <Button
         title="Forgot Password"
         color={Color.GRAY_2}
-        // onPress={() => setUser(username, password)}
+        onPress={() => setUser(username, password)}
       />
       </View> : 
       <View style={styles.formContainer}>
         <LoginInput
           title={"Email"}
-          onChangeText={setUsername}
-          value={username}
+          onChangeText={setEmail}
+          value={email}
         />
         <LoginInput
           title={"Username"}
@@ -73,6 +76,18 @@ export const Login = (props: ILoginProps) => {
           title={"Confirm Password"}
           onChangeText={setPassword}
           value={password}
+        />
+        <Button
+          title="Sign Up"
+          onPress={() => {
+            createUser({
+              name: "Damian",
+              email: email,
+              username: username,
+              password: password
+            })
+          }}
+          color={Color.VARIANT_1}
         />
       </View>
         }
