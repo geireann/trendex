@@ -4,7 +4,7 @@ import { get, post } from "./global/httpRequestUtils"
 /** In development mode (locally) the server is at localhost:5000*/
 const development = true;
 
-export const endpoint = 'https://localhost:5000/';
+export const endpoint = 'http://localhost:5000/';
 const baseEndpoint = endpoint
 
 /** This is the path to the nodes microservice */

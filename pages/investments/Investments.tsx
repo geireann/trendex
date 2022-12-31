@@ -93,7 +93,7 @@ export const Investments = () => {
     <View style={styles.container}>
       {/* <Text style={styles.header}>Investments</Text> */}
       <Text style={styles.total}>$72.34k</Text>
-      <LineGraph
+      {/* <LineGraph
           points={graphPoints}
           animated={true}
           color={Color.VARIANT_1}
@@ -101,7 +101,7 @@ export const Investments = () => {
           // onGestureStart={() => hapticFeedback('impactLight')}
           // onPointSelected={(p) => updatePriceTitle(p)}
           // onGestureEnd={() => resetPriceTitle()}
-      />
+      /> */}
       <LineChart
     data={{
       labels: getTimeFrame(),
