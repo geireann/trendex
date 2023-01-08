@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Discover, Investments, Login, Profile } from './pages';
+import { Discover, IInvestmentsProps, Investments, Login, Profile } from './pages';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { Color } from './global';
@@ -22,7 +22,7 @@ export enum Page {
 const BottomTab = createBottomTabNavigator();
 const UserStack = createNativeStackNavigator();
 
-const TrendexTabs = () => {
+const TrendexTabs = (props: any) => {
   return (
     <View style={styles.container}>
     <BottomTab.Navigator
@@ -68,7 +68,7 @@ const TrendexTabs = () => {
             <BlurView tint="dark" intensity={100} style={StyleSheet.absoluteFill} />
           ),
       })}>
-      <BottomTab.Screen name={Page.INVESTMENTS} component={Investments} />
+      <BottomTab.Screen name={Page.INVESTMENTS} component={Investments}/>
       <BottomTab.Screen name={Page.DISCOVER} component={Discover} />
       <BottomTab.Screen name={Page.PROFILE} component={Profile} />
     </BottomTab.Navigator>
@@ -81,6 +81,7 @@ export default function App() {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<string>('');
+  const [tokens, setTokens] = useState(null);
 
   // Handle user state changes
   function onAuthStateChangedTrigger(user: any) {
@@ -110,7 +111,7 @@ export default function App() {
   
   return (
     <NavigationContainer>
-      <TrendexTabs/>
+      <TrendexTabs user={user}/>
     </NavigationContainer>
   );
 }

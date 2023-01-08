@@ -1,6 +1,49 @@
+/**
+ * Class representing a token belonging to a user, storing information about
+ * its quantity, price per token, and of the name of the token.
+ */
+export class Token {
+    name: string;
+    quantity: number;
+    price: number;
+
+    constructor(name: string, quantity: number, price: number) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+    }
+}
+/**
+ * Interface representing a user
+ */
 export interface IUser {
     username: string,
     password: string,
     email: string,
-    tokens?: Map<string, number>
+    tokens: Array<Token>
+}
+
+/**
+ * Class representing a response from a call for mongodb.find
+ */
+export interface MongoObject {
+    user: IUser,
+}
+
+/**
+ * Concrete implementation of an IUser, created to return in case of a failure to properly
+ * fetch user from mongodb instance.
+ */
+export class EmptyUser implements IUser {
+    username: string;
+    password: string;
+    email: string;
+    tokens: Array<Token>;
+
+    constructor() {
+        this.username = '';
+        this.password = '';
+        this.email = '';
+        this.tokens = [];
+    }
 }

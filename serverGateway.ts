@@ -1,4 +1,4 @@
-import { IUser } from "./global"
+import { IUser, EmptyUser, MongoObject, Token} from "./global"
 import { get, post } from "./global/httpRequestUtils"
 
 /** In development mode (locally) the server is at localhost:5000*/
@@ -29,4 +29,28 @@ export const fetchUsers = async (): Promise<IUser[] | string> => {
       } catch (exception) {
     return "failed"
     }
+}
+
+export const fetchUser = async(username : string) : Promise<[IUser, string]> => {
+  try {
+    console.log('fetch user: ', username, baseEndpoint + servicePath + 'user')
+    let user = await post<MongoObject>(baseEndpoint + servicePath + 'user', {
+      username: username
+    });
+    return [user.user, "success"]
+  } catch (exception) {
+    return [new EmptyUser(), "failed"]
+  }
+}
+
+export const saveTokens = async(username: string, tokens : Token[]) => {
+  try {
+    console.log("Saving Tokens...")
+    await post(baseEndpoint + servicePath + 'savetokens', {
+      tokens: tokens,
+      username: username
+    });
+  } catch (exception) {
+    console.log(exception)
+  }
 }
