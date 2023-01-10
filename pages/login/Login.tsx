@@ -4,6 +4,7 @@ import { StyleSheet, View, Button, Image, Switch } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { Color, FontSize, LoginInput } from '../../global';
 import { createUser } from '../../serverGateway';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export interface ILoginProps {
   setUser: (username: string, password: string) => void,
@@ -11,8 +12,8 @@ export interface ILoginProps {
 }
 
 export const Login = (props: ILoginProps) => {
-
-    const {navigation, setUser} = props;
+  
+  const {navigation, setUser} = props;
 
   const [isSignup, setSignup] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");

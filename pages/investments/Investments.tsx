@@ -1,54 +1,29 @@
-import { Dimensions, StyleSheet, Text, View, Button, Pressable } from 'react-native';
-import { GraphPoint, LineGraph } from 'react-native-graph';
-import { Color, FontSize } from '../../global';
-import {
-  LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
-} from "react-native-chart-kit";
 import { useState } from 'react';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  LineChart
+} from "react-native-chart-kit";
+import { Color, FontSize } from '../../global';
+import { AthleteTokenCard } from '../../global/components/AthleteTokenCard';
+import { globalStyles } from '../../global/globalStyles';
 
 export enum TimeFrame {
   _1Y = "1Y",
   _6M = "6M",
   _3M = "3M",
-  _1M = "1M"
+  _1M = "1M",
+  _1W = "1W",
 }
 
 export const Investments = () => {
 
   const [timeframe, setTimeframe] = useState<TimeFrame>(TimeFrame._1Y)
-
-  const graphPoints:GraphPoint[] = [
-    {
-      value: 1000,
-      date: new Date('2022-11-01T03:24:00')
-    },
-    {
-      value: 1200,
-      date: new Date('2022-11-04T03:24:00')
-    },
-    {
-      value: 1512,
-      date: new Date('2022-11-10T03:24:00')
-    },
-    {
-      value: 2012,
-      date: new Date('2022-11-12T03:24:00')
-    },
-    {
-      value: 2521,
-      date: new Date('2022-11-15T00:24:00')
-    },
-  ];
+  const [tokenTotal, setTokenTotal] = useState<number>(21.43);
 
   const getTimeFrame = (): string[] => {
     switch(timeframe) {
       case TimeFrame._1Y:
-        return ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return ["Jan", "", "Mar", "", "May", "", "Jul", "", "Sep", "", "Nov", ""];
       case TimeFrame._6M:
         return ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       case TimeFrame._3M:
@@ -71,11 +46,11 @@ export const Investments = () => {
       50.42,
       65.32,
       80.21,
-      72.34
+      72.34,
     ];
     switch(timeframe) {
       case TimeFrame._1Y:
-        return {data};
+        return { data };
       case TimeFrame._6M:
         data = data.slice(-6);
         return { data };
@@ -87,68 +62,92 @@ export const Investments = () => {
     }
   }
 
+  const getWatchListTokens = ():JSX.Element[] => {
+    return [
+      <AthleteTokenCard />,
+      <AthleteTokenCard />,
+    ]
+  }
 
+  const getTokens = ():JSX.Element[] => {
+    return [
+      <AthleteTokenCard />,
+      <AthleteTokenCard />,
+      <AthleteTokenCard />,
+    ]
+  }
 
-  return (
-    <View style={styles.container}>
-      {/* <Text style={styles.header}>Investments</Text> */}
-      <Text style={styles.total}>$72.34k</Text>
-      {/* <LineGraph
-          points={graphPoints}
-          animated={true}
-          color={Color.VARIANT_1}
-          // enablePanGesture={true}
-          // onGestureStart={() => hapticFeedback('impactLight')}
-          // onPointSelected={(p) => updatePriceTitle(p)}
-          // onGestureEnd={() => resetPriceTitle()}
-      /> */}
-      <LineChart
-    data={{
-      labels: getTimeFrame(),
-      datasets: [ getData() ]
-    }}
-    width={Dimensions.get("window").width} // from react-native
-    height={250}
-    yAxisLabel="$"
-    yAxisSuffix="k"
-    yAxisInterval={1} // optional, defaults to 1
-    chartConfig={{
-      backgroundColor: Color.GRAY_2,
-      backgroundGradientFrom: Color.GRAY_2,
-      backgroundGradientTo: Color.GRAY_2,
-      decimalPlaces: 2, // optional, defaults to 2dp
-      color: (opacity = 1) => `rgba(255, 255, 255, 0)`,
-      labelColor: (opacity = 1) => Color.VARIANT_2,
-      style: {
-        borderRadius: 16,
-      },
-      propsForDots: {
-        r: "6",
-        strokeWidth: "2",
-        stroke: Color.VARIANT_1
-      }
-    }}
+  const getTimelineRangeButtons = (): JSX.Element[] => {
+    const buttons:JSX.Element[] = [];
+
+    Object.values(TimeFrame).forEach((value, ind) => {
+      console.log(value)
+      buttons.push(
+        <Pressable style={timeframe == value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setTimeframe(value as TimeFrame)}>
+          <Text style={timeframe == value ? globalStyles.buttonTextActive : globalStyles.buttonText} >{value}</Text>
+        </Pressable>
+      )
+    })
+
+    return buttons;
+  }
+
+  const getLineChart = ():JSX.Element => {
+    return (
+<LineChart
+        data={{
+          labels: getTimeFrame(),
+          datasets: [ getData() ]
+        }}
+        width={Dimensions.get("window").width - 40} // from react-native
+        height={200}
+        yAxisLabel="$"
+        yAxisSuffix="k"
+        yAxisInterval={1} // optional, defaults to 1
+        chartConfig={{
+          backgroundColor: Color.GRAY_2,
+          backgroundGradientFrom: Color.GRAY_2,
+          backgroundGradientTo: Color.GRAY_2,
+          decimalPlaces: 2, // optional, defaults to 2dp
+          color: (opacity = 1) => `rgba(255, 255, 255, 0.7)`,
+          labelColor: (opacity = 1) => Color.GRAY_4,
+          style: {
+            borderRadius: 16,
+          },
+          propsForDots: {
+            r: "3",
+            strokeWidth: "2",
+            stroke: Color.VARIANT_2
+          },
+          propsForLabels: {
+            fontFamily: 'monospace'
+          }
+      }}
     bezier
     style={{
       marginVertical: 20,
-      borderRadius: 0
+      borderRadius: 0,
     }}
   />
-  <View style={styles.dateBar}>
-    <Pressable style={styles.button} onPress={() => setTimeframe(TimeFrame._1M)}>
-      <Text style={timeframe == TimeFrame._1M ? styles.textActive : styles.textInactive} >{TimeFrame._1M}</Text>
-    </Pressable>
-    <Pressable style={styles.button} onPress={() => setTimeframe(TimeFrame._3M)}>
-      <Text style={timeframe == TimeFrame._3M ? styles.textActive : styles.textInactive} >{TimeFrame._3M}</Text>
-    </Pressable>
-    <Pressable style={styles.button} onPress={() => setTimeframe(TimeFrame._6M)}>
-      <Text style={timeframe == TimeFrame._6M ? styles.textActive : styles.textInactive} >{TimeFrame._6M}</Text>
-    </Pressable>
-    <Pressable style={styles.button} onPress={() => setTimeframe(TimeFrame._1Y)}>
-      <Text style={timeframe == TimeFrame._1Y ? styles.textActive : styles.textInactive} >{TimeFrame._1Y}</Text>
-    </Pressable>
-  </View>
-    </View>
+    )
+  }
+
+  return (
+    <ScrollView style={styles.container}>
+      <Text style={styles.total}>${tokenTotal}</Text>
+      {getLineChart()}
+      <View style={styles.dateBar}>
+        {getTimelineRangeButtons()}
+      </View>
+      <View style={styles.tokenContainer}>
+        <Text style={globalStyles.sectionHeader}>My Tokens</Text>
+        {getTokens()}
+      </View>
+      <View style={styles.watchlistContainer}>
+        <Text style={globalStyles.sectionHeader}>My Watch List</Text>
+        {getWatchListTokens()}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -156,32 +155,32 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.GRAY_2,
-    padding: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 50
   },
   total: {
     color: Color.VARIANT_2,
+    textAlign: 'left',
+    alignSelf: 'flex-end',
     fontSize: FontSize.LARGE,
-    fontWeight: "600"
+    fontWeight: "600",
+    fontFamily: 'monospace'
   },
   dateBar: {
     flexDirection: 'row',
-    gap: 5,
-  },
-  textActive: {
-    color: Color.VARIANT_1,
-    fontSize: FontSize.BODY_LARGE,
-  },
-  textInactive: {
-    fontSize: FontSize.BODY_LARGE,
-    color: Color.TEXT_ON_DARK,
-  },
-  button: {
-    alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 10,
+    marginLeft: 10
+  },
+  tokenContainer: {
+    flex: 1,
+    flexDirection: 'column',
+  },
+  watchlistContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    marginBottom: 20,
+    marginTop: 50
+
   }
 });
