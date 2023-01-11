@@ -128,5 +128,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.GRAY_1,
+    overflow: 'hidden'
   },
 });
