@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import { Color, FontSize, Sport } from '../globalEnums';
 import { Icon } from '@rneui/themed';
 import { IAthlete } from '../globalTypes';
+import { globalStyles } from '../globalStyles';
 
 export interface IAthleteCardProps {
   athlete?: IAthlete,
+  setAthlete: (athlete: IAthlete | undefined) => void
 }
 
 export const AthleteCard = (props: IAthleteCardProps) => {
@@ -19,11 +21,15 @@ export const AthleteCard = (props: IAthleteCardProps) => {
       lastName: "James",
       profileImageUrl: "https://hoopshabit.com/wp-content/uploads/getty-images/2017/07/1448620152.jpeg"
     },
+    setAthlete
   } = props;
 
 
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={() => {
+        console.log('pressed AthleteCard')
+        setAthlete(athlete)
+    }}>
       <View style={styles.profileImageContainer}>
         <Image 
           source={{uri:athlete.profileImageUrl}}
@@ -40,12 +46,9 @@ export const AthleteCard = (props: IAthleteCardProps) => {
                 {athlete.sport}
             </Text>
         </View>
-        <Text style={styles.token}>
-            ${athlete.tokenValue}
-        </Text>
       </View>
       {/* <Icon name={"notifications-outline"} type={"ionicon"} color={Color.TEXT_ON_DARK}/> */}
-    </View>
+    </Pressable>
   );
 }
 

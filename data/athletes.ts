@@ -7,6 +7,7 @@ export const athletes = [
       firstName: 'Hugo',
       lastName: 'Lloris',
       tokenValue: 9.7,
+      profileImageUrl: "https://cdn.theathletic.com/app/uploads/2021/08/20084355/hugo-lloris-tottenham-record-appearances-premier-league-scaled-e1629468745764.jpg"
     },
     {
       sport: Sport.FOOTBALL,
@@ -14,6 +15,7 @@ export const athletes = [
       firstName: 'David',
       lastName: 'Alaba',
       tokenValue: 12.3,
+      profileImageUrl: "https://icdn.football-espana.net/wp-content/uploads/2022/05/David-Alaba-1.jpeg"
     },
     {
       sport: Sport.FOOTBALL,
@@ -21,6 +23,7 @@ export const athletes = [
       firstName: 'Dele',
       lastName: 'Alli',
       tokenValue: 12.3,
+      profileImageUrl: "https://images.teamtalk.com/content/uploads/2022/05/14113416/Dele-Alli-1.jpg"
     },
     {
       id: '3',

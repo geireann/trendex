@@ -30,6 +30,18 @@ export const globalStyles = StyleSheet.create({
         padding: 0,
         margin: 0
       },
+      buttonTextV1: {
+        fontSize: FontSize.HEADER,
+        color: Color.VARIANT_3,
+        padding: 0,
+        margin: 0
+      },
+      buttonTextV2: {
+        fontSize: FontSize.HEADER,
+        padding: 0,
+        margin: 0,
+        color: Color.VARIANT_2
+      },
       button: {
         alignItems: 'center',
         justifyContent: 'center',
@@ -50,6 +62,26 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: '#ff66690f',
         height: 'fit-content',
         marginRight: 10
+      },
+      buttonV1: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 3,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        border: `solid 1px ${Color.VARIANT_3}`,
+        backgroundColor: '#cceec60f',
+        height: 'fit-content',
+      },
+      buttonV2: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 3,
+        paddingHorizontal: 15,
+        borderRadius: 10,
+        border: `solid 1px ${Color.VARIANT_2}`,
+        backgroundColor: '#ff66690f',
+        height: 'fit-content',
       },
       horizontalScroll: {
         flex: 1,

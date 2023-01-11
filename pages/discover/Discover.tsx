@@ -9,7 +9,9 @@ import { NewsCard } from '../../global/components/NewsCard';
 import { globalStyles } from '../../global/globalStyles';
 import { getNews } from '../../global/globalUtils';
 
-export const Discover = () => {
+export const Discover = ({setAthlete}: {
+  setAthlete: (athlete: IAthlete | undefined) => void
+}) => {
 
   const [searchValue, setSearchValue] = useState<string>('');
   const [categoryFilter, setCategoryFitler] = useState<Sport>();
@@ -48,7 +50,7 @@ export const Discover = () => {
   }
 
   const renderItem = ({item}:any) => (
-    <AthleteCard athlete={item} />
+    <AthleteCard athlete={item} setAthlete={setAthlete}/>
   );
 
   const getLatestNews = (): JSX.Element[] => {

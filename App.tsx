@@ -1,16 +1,17 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Button, Modal, StyleSheet, View } from 'react-native';
 import { Discover, Investments, Login, Profile } from './pages';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { Color, IUser } from './global';
+import { Color, IAthlete, IUser, Sport } from './global';
 import { BlurView } from 'expo-blur';
 import './config/firebase';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { Header } from './global/components/Header';
+import { Athlete } from './pages/athlete';
 
 
 export enum Page {
@@ -24,7 +25,7 @@ export enum Page {
 const BottomTab = createBottomTabNavigator();
 const UserStack = createNativeStackNavigator();
 
-const TrendexTabs = () => {
+const TrendexTabs = ({setAthlete}: any) => {
   return (
     <View style={styles.container}>
     <BottomTab.Navigator
@@ -52,7 +53,6 @@ const TrendexTabs = () => {
               break;
           }
 
-          // You can return any component that you like here!
           return <Ionicons name={iconName as any} size={size} color={color} />;
         },
         header: ({ navigation, route, options }) => {
@@ -69,9 +69,15 @@ const TrendexTabs = () => {
           <BlurView tint="dark" intensity={50} style={StyleSheet.absoluteFill} />
         )
       })}>
-      <BottomTab.Screen name={Page.INVESTMENTS} component={Investments} />
-      <BottomTab.Screen name={Page.DISCOVER} component={Discover} />
-      <BottomTab.Screen name={Page.PROFILE} component={Profile} />
+        <BottomTab.Screen name={Page.INVESTMENTS}>
+          {(props) => <Investments setAthlete={setAthlete}/>}
+        </BottomTab.Screen>
+        <BottomTab.Screen name={Page.DISCOVER}>
+          {(props) => <Discover setAthlete={setAthlete}/>}
+        </BottomTab.Screen>
+        <BottomTab.Screen name={Page.PROFILE}>
+          {(props) => <Profile />}
+        </BottomTab.Screen>
     </BottomTab.Navigator>
     </View>
   );
@@ -86,6 +92,8 @@ export default function App() {
     password: "password",
     email: "test@trendex.com"
   });
+
+  const [athlete, setAthlete] = useState<IAthlete | undefined>();
 
   // Handle user state changes
   // function onAuthStateChangedTrigger(user: any) {
@@ -119,7 +127,18 @@ export default function App() {
   
   return (
     <NavigationContainer>
-      <TrendexTabs/>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={athlete !== undefined}
+        onRequestClose={() => {
+          // Alert.alert("Modal has been closed.");
+          setAthlete(undefined);
+        }}
+      >
+        {athlete && <Athlete setAthlete={setAthlete} athlete={athlete}/>}
+      </Modal>
+      <TrendexTabs setAthlete={setAthlete}/>
     </NavigationContainer>
   );
 }

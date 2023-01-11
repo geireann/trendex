@@ -13,13 +13,13 @@ export const getNews = async (everything: boolean, query?: string, newsCategory?
 
     console.log(url);
 
-    // var req = new Request(url);
+    var req = new Request(url);
 
-    // const response = await fetch(req)
+    const response = await fetch(req)
 
-    // if (!response.ok) {
-    //     throw new Error('Data coud not be fetched!')
-    // } else {
-    //     return response.json()
-    // }
+    if (!response.ok) {
+        throw new Error('Data coud not be fetched!')
+    } else {
+        return response.json()
+    }
   }

@@ -11,6 +11,14 @@ export enum Color {
     TEXT_ON_LIGHT = "#2E2E2E"
 }
 
+export enum Timeframe {
+    _1Y = "1Y",
+    _6M = "6M",
+    _3M = "3M",
+    _1M = "1M",
+    _1W = "1W",
+  }
+
 export enum FontSize {
     LARGE = 25,
     HEADER = 18,
