@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, Linking, TouchableOpacity } from 'react-native';
 import { Color } from '../globalEnums';
 
 export interface INewsCardProps {
@@ -10,23 +10,29 @@ export interface INewsCardProps {
     }
     description?: string;
     title?: string
+    url?: string
 }
 
 export const NewsCard = (props: INewsCardProps) => {
 
   const {
-    urlToImage, author, source, description, title
+    urlToImage, author, source, description, title, url
   } = props;
 
 
   return (
-    <View style={styles.container}>
-      <Text>{title}</Text>
-      {urlToImage && <Image 
-          source={{uri:urlToImage}}
-          style={styles.newsImage}
+    <TouchableOpacity style={styles.container} onPress={() => {
+        url && Linking.openURL(url)
+    }}>
+    {urlToImage && <View style={styles.newsImageContainer}>
+    {urlToImage && <Image 
+        source={{uri:urlToImage}}
+        style={styles.newsImage}
         ></Image>}
-    </View>
+      </View>}
+      <Text numberOfLines={3} style={styles.newsTitle}>{title}</Text>
+      <Text style={styles.source}>{source?.name}</Text>
+    </TouchableOpacity>
   );
 }
 
@@ -36,19 +42,38 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: Color.GRAY_3,
     alignItems: 'stretch',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     minHeight: 80,
-    paddingLeft: 20,
-    paddingRight: 20,
-    // borderColor: Color.VARIANT_1,
-    // borderWidth: 2,
-    // borderStyle: 'solid',
+    maxHeight: 80,
     width: '90vw',
     borderRadius: 10,
     marginBottom: 10,
-    marginTop: 5
+    marginTop: 5,
+    overflow: 'hidden'
+  },
+  newsTitle: {
+    color: Color.TEXT_ON_DARK,
+    height: '100%',
+    padding: 5
+  },
+  newsImageContainer: {
+    overflow: 'hidden',
+    width: '25%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   newsImage: {
-
+    width: '100%',
+    height: '100%',
+  },
+  source: {
+    position: 'absolute',
+    right: 5,
+    bottom: 5,
+    backgroundColor: Color.VARIANT_2,
+    color: Color.TEXT_ON_DARK,
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    borderRadius: 10
   }
 });

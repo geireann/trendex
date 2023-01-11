@@ -69,6 +69,7 @@ export const globalStyles = StyleSheet.create({
         paddingVertical: 3,
         paddingHorizontal: 15,
         borderRadius: 10,
+        marginRight: 5,
         border: `solid 1px ${Color.VARIANT_3}`,
         backgroundColor: '#cceec60f',
         height: 'fit-content',

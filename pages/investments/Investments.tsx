@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Color, FontSize, LineGraph, Timeframe } from '../../global';
 import { AthleteTokenCard } from '../../global/components/AthleteTokenCard';
 import { globalStyles } from '../../global/globalStyles';
@@ -30,9 +30,9 @@ export const Investments = ({setAthlete}: any) => {
     Object.values(Timeframe).forEach((value, ind) => {
       console.log(value)
       buttons.push(
-        <Pressable style={timeframe == value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setTimeframe(value as Timeframe)}>
+        <TouchableOpacity style={timeframe == value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setTimeframe(value as Timeframe)}>
           <Text style={timeframe == value ? globalStyles.buttonTextActive : globalStyles.buttonText} >{value}</Text>
-        </Pressable>
+        </TouchableOpacity>
       )
     })
 

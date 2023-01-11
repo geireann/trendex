@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Switch, ScrollView, Pressable, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, Switch, ScrollView, TouchableOpacity, FlatList } from 'react-native';
 import { athletes } from '../../data';
 import { dummyArticles } from '../../data/dummyNewsArticles';
 import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport } from '../../global';
@@ -24,9 +24,9 @@ export const Discover = ({setAthlete}: {
     const filters:JSX.Element[] = [];
 
     Object.values(Sport).forEach((value, ind) => {
-      filters.push(<Pressable style={categoryFilter === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setCategoryFitler(value as Sport)}>
+      filters.push(<TouchableOpacity style={categoryFilter === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setCategoryFitler(value as Sport)}>
         <Text style={categoryFilter === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{value}</Text>
-      </Pressable>)
+      </TouchableOpacity>)
     })
 
     return filters;
@@ -36,9 +36,9 @@ export const Discover = ({setAthlete}: {
     const filters:JSX.Element[] = [];
 
     Object.values(NewsCountry).forEach((value, ind) => {
-      filters.push(<Pressable style={newsCountry === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setNewsCountry(value as NewsCountry)}>
+      filters.push(<TouchableOpacity style={newsCountry === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setNewsCountry(value as NewsCountry)}>
         <Text style={newsCountry === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{value}</Text>
-      </Pressable>)
+      </TouchableOpacity>)
     })
 
     return filters;

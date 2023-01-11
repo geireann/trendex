@@ -59,7 +59,7 @@ const TrendexTabs = ({setAthlete}: any) => {
           const title = getHeaderTitle(options, route.name);
           return <Header title={title}/>;
         },
-        tabBarActiveTintColor: Color.VARIANT_1,
+        tabBarActiveTintColor: Color.VARIANT_2,
         tabBarInactiveTintColor: Color.TEXT_ON_DARK,
         tabBarStyle: { 
           position: 'absolute',

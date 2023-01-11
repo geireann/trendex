@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Color, FontSize, Sport } from '../globalEnums';
 import { Icon } from '@rneui/themed';
 import { IAthlete } from '../globalTypes';
@@ -26,7 +26,7 @@ export const AthleteCard = (props: IAthleteCardProps) => {
 
 
   return (
-    <Pressable style={styles.container} onPress={() => {
+    <TouchableOpacity style={styles.container} onPress={() => {
         console.log('pressed AthleteCard')
         setAthlete(athlete)
     }}>
@@ -48,7 +48,7 @@ export const AthleteCard = (props: IAthleteCardProps) => {
         </View>
       </View>
       {/* <Icon name={"notifications-outline"} type={"ionicon"} color={Color.TEXT_ON_DARK}/> */}
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     minHeight: 80,
-    borderColor: Color.VARIANT_1,
+    borderColor: Color.VARIANT_2,
     borderWidth: 2,
     borderStyle: 'solid',
     width: '50%',
@@ -81,7 +81,9 @@ const styles = StyleSheet.create({
   },
   profileImageContainer: {
     overflow: 'hidden',
-    width: '40%'
+    width: '40%',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   profileImage: {
     width: 100,

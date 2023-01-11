@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Button, Pressable, StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import { Button, TouchableOpacity, StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import { dummyArticles } from '../../data/dummyNewsArticles';
 import { Color, FontSize, getNews, globalStyles, IAthlete } from '../../global';
 import { NewsCard } from '../../global/components/NewsCard';
+import { Token } from '../../global/components/Token';
 
 export interface IAthleteProps {
     athlete: IAthlete,
@@ -10,36 +11,58 @@ export interface IAthleteProps {
 }
 
 export const Athlete = ({setAthlete, athlete}: IAthleteProps) => {
-    const { tokenValue = 0 } = athlete;
-    const [tokens, setTokens] = useState<number>(0);
+    const { tokenValue = 3 } = athlete;
+    const [tokens, setTokens] = useState<number>(5);
     const [articles, setArticles] = useState<any[]>([]);
     const [articlesLoaded, setArticlesLoaded] = useState<boolean>(false);
 
     const getCloseButton = () => {
         return (
-            <Pressable style={styles.closeButton}
+            <TouchableOpacity style={styles.closeButton}
         onPress={() => {
             setAthlete(undefined)
         }}
         >
             <Text style={styles.closeButtonText}>Close</Text>
-        </Pressable>
+        </TouchableOpacity>
         )
+    }
+
+    const renderItem = ({item}: any) => (
+        <TouchableOpacity onPress={() => console.log('hi')}>
+          <Token/>
+        </TouchableOpacity>
+      );
+
+    const getTokenVisualization = () => {
+        const tokenData: any[] = [];
+
+        for(let i = 0; i < tokens; i++) {
+            tokenData.push({
+                id: i,
+            })
+        }
+
+        return (<FlatList numColumns={5} data={tokenData} renderItem={renderItem}></FlatList>)
     }
 
     const getUserTokenInfo = () => {
         return (
             <View>
-                <Text>
+                <Text style={globalStyles.sectionHeader}>
+                    Your {athlete.firstName} {athlete.lastName} Tokens
+                </Text>
+                {getTokenVisualization()}
+                <Text style={styles.tokenInfo}>
                     You have <Text>{tokens}</Text> tokens which is equivalent to <Text>${tokens * tokenValue}</Text>
                 </Text>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                    <Pressable style={globalStyles.buttonV1}>
+                    <TouchableOpacity style={globalStyles.buttonV1}>
                        <Text style={globalStyles.buttonTextV1}>Buy</Text>
-                    </Pressable>
-                    <Pressable style={globalStyles.buttonV2}>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={globalStyles.buttonV2}>
                         <Text style={globalStyles.buttonTextV2}>Sell</Text>
-                    </Pressable>
+                    </TouchableOpacity>
                 </View>
             </View>
         )
@@ -58,7 +81,7 @@ export const Athlete = ({setAthlete, athlete}: IAthleteProps) => {
       }
 
       useEffect(() => {
-        getNews(true, athlete.lastName, undefined, undefined)
+        getNews(true, athlete.firstName+"%20AND%20"+athlete.lastName, undefined, undefined)
           .then((res: any) => {
             console.log(res.articles)
             setArticles(res.articles)
@@ -93,9 +116,6 @@ export const Athlete = ({setAthlete, athlete}: IAthleteProps) => {
                 {athlete.sport}
             </Text>
             {getUserTokenInfo()}
-            <Text style={styles.token}>
-                ${athlete.tokenValue}
-            </Text>
             <Text style={globalStyles.sectionHeader}>
                 Related News
             </Text>
@@ -158,10 +178,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
     border: `solid 1px ${Color.VARIANT_2}`,
-    backgroundColor: '#ff66690f',
+    backgroundColor: '#ffffff99',
     zIndex: 1
   },
   closeButtonText: {
     color: Color.VARIANT_2,
+  },
+  tokenInfo: {
+    fontSize: FontSize.BODY_LARGE,
+    paddingTop: 5,
+    paddingBottom: 10,
+    color: Color.TEXT_ON_DARK
   }
 });

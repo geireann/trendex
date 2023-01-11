@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Color, FontSize, Sport } from '../globalEnums';
 import { Icon } from '@rneui/themed';
 import { IAthlete } from '../globalTypes';
+import { Token } from './Token';
 
 export interface IAthleteTokenCardProps {
   athlete?: IAthlete,
@@ -27,7 +28,7 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
 
 
   return (
-    <Pressable style={styles.container} onPress={() => {
+    <TouchableOpacity style={styles.container} onPress={() => {
       setAthlete(athlete)
     }}>
       <View style={styles.profileImageContainer}>
@@ -48,24 +49,23 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
         </View>
       </View>
       <View style={styles.tokenContainer}>
-        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', maxHeight: 30}}>
-          <Text style={styles.tokenValue}>
-            ${athlete.tokenValue}
-          </Text>
-          <Text style={{paddingHorizontal: 10, color: Color.TEXT_ON_DARK_VARIANT}}>
-            x
-          </Text>
+        <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', maxHeight: 50}}>
           <Text style={styles.userTokens}>
             {userTokens}
           </Text>
+          <Text style={{paddingHorizontal: 3, color: Color.TEXT_ON_DARK_VARIANT}}>
+            x
+          </Text>
+          <Token value={athlete.tokenValue}/>
+          <Text style={styles.totalAmount}>
+            = ${athlete.tokenValue && (userTokens * athlete.tokenValue).toFixed(2)}
+          </Text>
         </View>
           {/* <Text style={styles.tokenLabel}>tokens</Text> */}
-        <Text style={styles.totalAmount}>
-          = ${athlete.tokenValue && (userTokens * athlete.tokenValue).toFixed(2)}
-        </Text>
+        
       </View>
       {/* <Icon name={"notifications-outline"} type={"ionicon"} color={Color.TEXT_ON_DARK}/> */}
-    </Pressable>
+    </TouchableOpacity>
   );
 }
 
@@ -98,7 +98,9 @@ const styles = StyleSheet.create({
   },
   profileImageContainer: {
     overflow: 'hidden',
-    width: '30%'
+    width: '25%',
+    justifyContent: 'flex-start',
+    alignItems: 'center'
   },
   profileImage: {
     width: '100%',
@@ -112,19 +114,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between'
   },
-  tokenValue: {
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 10,
-    backgroundColor: Color.VARIANT_2,
-    width: 'fit-content',
-    color: Color.TEXT_ON_DARK,
-    fontWeight: "600",
-    maxHeight: 'fit-content'
-
-  },
   tokenContainer: {
-    width: '30%',
+    width: '50%',
     height: '100%',
     justifyContent: 'center',
     flexDirection: 'column',
