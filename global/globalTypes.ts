@@ -20,6 +20,7 @@ export interface IUser {
     username: string,
     password: string,
     email: string,
+    balance: number,
     tokens: Array<Token>
 }
 
@@ -38,12 +39,14 @@ export class EmptyUser implements IUser {
     username: string;
     password: string;
     email: string;
+    balance: number;
     tokens: Array<Token>;
 
     constructor() {
         this.username = '';
         this.password = '';
         this.email = '';
+        this.balance = 0;
         this.tokens = [];
     }
 }

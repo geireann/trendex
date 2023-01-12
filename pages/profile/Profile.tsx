@@ -3,13 +3,14 @@ import { useState, useEffect} from 'react';
 import { StyleSheet, Text, View, Button, Switch } from 'react-native';
 
 export const Profile = () => {
+  const [balance, setBalance] = useState<number>(0);
+  
+  // useEffect(() => {
+  //   // constFetchAvailableBalance = async () => {
 
-  useEffect(() => {
-    // constFetchAvailableBalance = async () => {
 
-
-    // }
-  })
+  //   // }
+  // })
   return (
     <View style={styles.container}>
       <Text>Profile!</Text>

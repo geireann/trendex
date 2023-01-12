@@ -85,6 +85,7 @@ export const Login = (props: ILoginProps) => {
               username: username.trim().toLowerCase(),
               password: password,
               email: email,
+              balance: 100,
               tokens: [new Token("Lebron James", 1, 10), 
                       new Token("Robert Lewandowski", 2, 18),
                       new Token("Kylian Mbappe", 3, 60)

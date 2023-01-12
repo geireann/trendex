@@ -29,8 +29,9 @@ export const Investments = () => {
   const [timeframe, setTimeframe] = useState<TimeFrame>(TimeFrame._1Y)
   const [tokens, setTokens] = useState<Token[]>([]);
   const [total, setTotal] = useState<number>(0);
+  const [balance, setBalance] = useState<number>(100);
   // Temp username, until I can figure out how to pass props into the component thing in BottomTab.Screen in App.tsx
-  const tempUsername = "vienna";
+  const tempUsername = "viennatest1";
   
   const graphPoints:GraphPoint[] = [
     {
@@ -78,14 +79,21 @@ export const Investments = () => {
 
   const updateTokensCount = async (name : string) => {
     const newTokens = [...tokens]
+    let updatedToken = new Token("Default Value", 0, 0);
     for(let i = 0; i < newTokens.length; i++){
       if (tokens[i].name == name) {
-        tokens[i].quantity += 1;
+        updatedToken = tokens[i]
+        tokens[i].quantity += 1
+        console.log("UPDATED")
       }
     }
-    setTokens(newTokens);
-    setTotal(calcTotal(newTokens))
-    await saveTokens(tempUsername, newTokens)
+    if (updatedToken.price < balance) {
+      setTokens(newTokens);
+      setTotal(calcTotal(newTokens))
+      const newBalance = balance - updatedToken.price
+      setBalance(newBalance)
+      await saveTokens(tempUsername, newTokens, newBalance)
+    }
 
   }
 
@@ -165,6 +173,7 @@ export const Investments = () => {
           console.log("user tokens" + user.tokens);
           setTokens(user.tokens)
           setTotal(calcTotal(user.tokens));
+          setBalance(user.balance);
         }
       }  
       fetchTokens();
@@ -174,6 +183,7 @@ export const Investments = () => {
       <ScrollView contentContainerStyle={styles.container}>
       {/* <Text style={styles.header}>Investments</Text> */}
       <Text style={styles.total}>{"$" + total}</Text>
+      <Text style={styles.total}>{"Balance: $" + balance}</Text>
       {/* <LineGraph
       points={graphPoints}
       animated={true}
