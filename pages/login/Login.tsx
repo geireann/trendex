@@ -4,6 +4,7 @@ import { StyleSheet, View, Button, Image, Switch } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { Color, FontSize, LoginInput, Token} from '../../global';
 import { createUser, fetchUser, fetchUsers} from '../../serverGateway';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export interface ILoginProps {
   setUser: (username: string, password: string) => void,

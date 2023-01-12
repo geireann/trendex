@@ -1,4 +1,9 @@
 /**
+ * Interface representing a user
+ */
+import { Sport } from "./globalEnums"
+
+/**
  * Class representing a token belonging to a user, storing information about
  * its quantity, price per token, and of the name of the token.
  */
@@ -13,9 +18,7 @@ export class Token {
         this.price = price;
     }
 }
-/**
- * Interface representing a user
- */
+
 export interface IUser {
     username: string,
     password: string,
@@ -49,4 +52,13 @@ export class EmptyUser implements IUser {
         this.balance = 0;
         this.tokens = [];
     }
+}
+
+export interface IAthlete {
+    id?: string;
+    sport: Sport
+    profileImageUrl: string,
+    firstName: string,
+    lastName?: string,
+    tokenValue?: number,
 }
