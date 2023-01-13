@@ -1,13 +1,40 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, View, Button, Image, Switch } from 'react-native';
+import { StyleSheet, View, Button, Image, Switch, Alert } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
-import { Color, FontSize, LoginInput, Token} from '../../global';
+import { Color, FontSize, LoginInput, IUser, TokenType, Sport} from '../../global';
 import { createUser, fetchUser, fetchUsers} from '../../serverGateway';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import {crypto, key, iv} from '../../App'
+
+
+// Crypto source https://www.tutorialspoint.com/encrypt-and-decrypt-data-in-nodejs
+export interface EncryptedDict {
+  iv: string;
+  encryptedData: string;
+}
+
+//Encrypting text
+function encrypt(text: string) {
+  let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv);
+  let encrypted = cipher.update(text);
+  encrypted = Buffer.concat([encrypted, cipher.final()]);
+  return { iv: iv.toString(), encryptedData: encrypted.toString('hex') };
+}
+
+// Decrypting text
+function decrypt(text: EncryptedDict) {
+  let iv = Buffer.from(text.iv, 'hex');
+  let encryptedText = Buffer.from(text.encryptedData, 'hex');
+  let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv);
+  let decrypted = decipher.update(encryptedText);
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
+  return decrypted.toString();
+}
+
 
 export interface ILoginProps {
-  setUser: (username: string, password: string) => void,
+  setUser: (user: IUser) => void,
     navigation?: NavigationProp<any,any>
 }
 
@@ -28,6 +55,22 @@ export const Login = (props: ILoginProps) => {
 
   const staticImage = require("./trendex.png");
 
+  const attemptLogIn = async (username: string, password: string) => {
+    const encryptResult = encrypt(password);
+    const result = await fetchUser(username, encryptResult.encryptedData);
+    if (result[1] == "success") {
+      setUser(result[0])
+    } else {
+      Alert.alert('Alert Title', 'Username or Password Incorrect - Please Try Again', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ])
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -49,13 +92,13 @@ export const Login = (props: ILoginProps) => {
       />
       <Button
         title="Login"
-        onPress={() => setUser(username, password)}
+        onPress={() => attemptLogIn(username, password)}
         color={Color.VARIANT_1}
       />
       <Button
         title="Forgot Password"
         color={Color.GRAY_2}
-        onPress={() => setUser(username, password)}
+        onPress={() => console.log("Forgot password")}
       />
       </View> : 
       <View style={styles.formContainer}>
@@ -84,15 +127,22 @@ export const Login = (props: ILoginProps) => {
           onPress={() => {
             createUser({
               username: username.trim().toLowerCase(),
-              password: password,
+              password: encrypt(password).encryptedData,
               email: email,
               balance: 100,
-              tokens: [new Token("Lebron James", 1, 10), 
-                      new Token("Robert Lewandowski", 2, 18),
-                      new Token("Kylian Mbappe", 3, 60)
+              tokens: [new TokenType("Lebron James", 1, 10, "", Sport.BASKETBALL), 
+                      new TokenType("Robert Lewandowski", 2, 18, "", Sport.FOOTBALL),
+                      new TokenType("Kylian Mbappe", 3, 60, "", Sport.FOOTBALL)
                     ]
             })
-            setUser(username, password)
+            Alert.alert('Alert Title', 'Profile Successfully Created - Please Log In To Begin Trading', [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ])
           }}
           color={Color.VARIANT_1}
         />

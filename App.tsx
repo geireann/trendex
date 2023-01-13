@@ -5,7 +5,7 @@ import { Discover, Investments, Login, Profile } from './pages';
 import { Button, Modal, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { Color, IAthlete, IUser, Sport } from './global';
+import { Color, IAthlete, IUser, Sport, TokenType} from './global';
 import { BlurView } from 'expo-blur';
 import './config/firebase';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -13,6 +13,11 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { Header } from './global/components/Header';
 import { Athlete } from './pages/athlete';
 
+export const crypto = require('crypto');
+const algorithm = 'aes-256-cbc'; //Using AES encryption
+//make these not hardcoded later lol
+export const key = "85e6fa2c3c04586c3bb7a4132b42a42e"
+export const iv = "ca39fbde137357be"
 
 export enum Page {
   LOGIN = 'Login',
@@ -22,10 +27,16 @@ export enum Page {
   DISCOVER = 'Discover',
 }
 
+export interface InvestmentsProps {
+  setAthlete : any,
+  user: IUser
+}
+
 const BottomTab = createBottomTabNavigator();
 const UserStack = createNativeStackNavigator();
 
-const TrendexTabs = ({setAthlete}: any) => {
+const TrendexTabs = (props: any) => {
+
   return (
     <View style={styles.container}>
     <BottomTab.Navigator
@@ -70,13 +81,14 @@ const TrendexTabs = ({setAthlete}: any) => {
         )
       })}>
         <BottomTab.Screen name={Page.INVESTMENTS}>
-          {(props) => <Investments setAthlete={setAthlete}/>}
+          {(_) => <Investments setAthlete={props.setAthlete} currentUser={props.currentUser} tokens={props.tokens} 
+          setTokens={props.setTokens}/>}
         </BottomTab.Screen>
         <BottomTab.Screen name={Page.DISCOVER}>
-          {(props) => <Discover setAthlete={setAthlete}/>}
+          {(_) => <Discover setAthlete={props.setAthlete}/>}
         </BottomTab.Screen>
         <BottomTab.Screen name={Page.PROFILE}>
-          {(props) => <Profile />}
+          {(_) => <Profile />}
         </BottomTab.Screen>
     </BottomTab.Navigator>
     </View>
@@ -95,23 +107,18 @@ export default function App() {
     tokens: []
   });
 
+  const [tokens, setTokens] = useState<TokenType[]>([]);
   const [athlete, setAthlete] = useState<IAthlete | undefined>();
 
-  const setUserProfile = (username: string, password: string) => { 
-    setUser({
-      username: username,
-      password: password,
-      email: username,
-      // temp fix - fetch information from database for info here
-      balance: 0,
-      tokens: []
-    })
-    console.log(username, password);
+  const setUserProfile = (user: IUser) => { 
+    setUser(user)
+    console.log(user.username)
   }
 
-  if (!user) {
+  if (user.username == "username") {
     return <Login setUser={setUserProfile}/>
   } 
+  
   
   return (
     <NavigationContainer>
@@ -124,9 +131,10 @@ export default function App() {
           setAthlete(undefined);
         }}
       >
-        {athlete && <Athlete setAthlete={setAthlete} athlete={athlete}/>}
+        {athlete && <Athlete balance={user.balance} username={user.username} password={user.password} setAthlete={setAthlete} 
+        athlete={athlete} tokens={tokens} setTokens={setTokens}/>}
       </Modal>
-      <TrendexTabs setAthlete={setAthlete}/>
+      <TrendexTabs setAthlete={setAthlete} setTokens={setTokens} tokens={tokens} currentUser={user}/>
     </NavigationContainer>
   );
 }

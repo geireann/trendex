@@ -2,27 +2,21 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { Color, FontSize, Sport } from '../globalEnums';
-import { Icon } from '@rneui/themed';
+// import { Icon } from '@rneui/themed';
 import { IAthlete } from '../globalTypes';
 import { Token } from './Token';
 
 export interface IAthleteTokenCardProps {
-  athlete?: IAthlete,
-  userTokens?: number,
+  athlete: IAthlete,
+  numberTokens: number,
   setAthlete: (athlete: IAthlete | undefined) => void
 }
 
 export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
 
   const {
-    athlete = {
-      sport: Sport.BASKETBALL,
-      tokenValue: 12.3,
-      firstName: "Lebron",
-      lastName: "James",
-      profileImageUrl: "https://hoopshabit.com/wp-content/uploads/getty-images/2017/07/1448620152.jpeg"
-    },
-    userTokens = 3,
+    athlete,
+    numberTokens,
     setAthlete
   } = props;
 
@@ -40,8 +34,7 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
       <View style={styles.athleteBioContainer}>
         <View>
             <Text style={styles.name}>
-                <Text>{athlete.firstName} </Text>
-                <Text>{athlete.lastName}</Text>
+                <Text>{athlete.name} </Text>
             </Text>
             <Text style={styles.sport}>
                 {athlete.sport}
@@ -51,14 +44,14 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
       <View style={styles.tokenContainer}>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', maxHeight: 50}}>
           <Text style={styles.userTokens}>
-            {userTokens}
+            {numberTokens}
           </Text>
           <Text style={{paddingHorizontal: 3, color: Color.TEXT_ON_DARK_VARIANT}}>
             x
           </Text>
           <Token value={athlete.tokenValue}/>
           <Text style={styles.totalAmount}>
-            = ${athlete.tokenValue && (userTokens * athlete.tokenValue).toFixed(2)}
+            = ${athlete.tokenValue && (numberTokens * athlete.tokenValue).toFixed(2)}
           </Text>
         </View>
           {/* <Text style={styles.tokenLabel}>tokens</Text> */}

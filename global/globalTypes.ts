@@ -7,15 +7,20 @@ import { Sport } from "./globalEnums"
  * Class representing a token belonging to a user, storing information about
  * its quantity, price per token, and of the name of the token.
  */
-export class Token {
+export class TokenType {
     name: string;
     quantity: number;
     price: number;
+    profileUrl: string;
+    sport: Sport;
 
-    constructor(name: string, quantity: number, price: number) {
+
+    constructor(name: string, quantity: number, price: number, profileUrl: string, sport: Sport) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
+        this.sport = sport;
+        this.profileUrl = profileUrl
     }
 }
 
@@ -24,7 +29,7 @@ export interface IUser {
     password: string,
     email: string,
     balance: number,
-    tokens: Array<Token>
+    tokens: Array<TokenType>
 }
 
 /**
@@ -43,7 +48,7 @@ export class EmptyUser implements IUser {
     password: string;
     email: string;
     balance: number;
-    tokens: Array<Token>;
+    tokens: Array<TokenType>;
 
     constructor() {
         this.username = '';
@@ -58,7 +63,7 @@ export interface IAthlete {
     id?: string;
     sport: Sport
     profileImageUrl: string,
-    firstName: string,
-    lastName?: string,
-    tokenValue?: number,
+    name: string,
+    tokenValue: number,
+    quantity: number
 }
