@@ -11,16 +11,11 @@ export class TokenType {
     name: string;
     quantity: number;
     price: number;
-    profileUrl: string;
-    sport: Sport;
 
-
-    constructor(name: string, quantity: number, price: number, profileUrl: string, sport: Sport) {
+    constructor(name: string, quantity: number, price: number) {
         this.name = name;
         this.quantity = quantity;
         this.price = price;
-        this.sport = sport;
-        this.profileUrl = profileUrl
     }
 }
 
@@ -63,7 +58,7 @@ export interface IAthlete {
     id?: string;
     sport: Sport
     profileImageUrl: string,
-    name: string,
-    tokenValue: number,
-    quantity: number
+    firstName: string,
+    lastName?: string,
+    tokenValue?: number,
 }

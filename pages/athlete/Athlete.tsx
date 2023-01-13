@@ -1,51 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Button, TouchableOpacity, StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, FontSize, getNews, globalStyles, IAthlete, IUser, TokenType} from '../../global';
+import { Color, FontSize, getNews, globalStyles, IAthlete } from '../../global';
 import { NewsCard } from '../../global/components/NewsCard';
 import { Token } from '../../global/components/Token';
-import { fetchUser, saveTokens } from '../../serverGateway';
 
 export interface IAthleteProps {
-    username: string,
     athlete: IAthlete,
-    setAthlete: (athlete: IAthlete | undefined) => void,
-    balance: number,
-    password: string,
-    setTokens: any,
-    tokens: any
+    setAthlete: (athlete: IAthlete | undefined) => void
 }
 
 export const Athlete = (props: IAthleteProps) => {
-    const athlete = props.athlete;
-    const [tokensAmount, setTokensAmount] = useState<number>(0);
+    const { tokenValue = 3 } = props.athlete;
+    const [tokens, setTokens] = useState<number>(5);
     const [articles, setArticles] = useState<any[]>([]);
-    const [balance, setBalance] = useState<number>(0);
-    const [tokens, setTokens] = useState<TokenType[]>([]);
-
     const [articlesLoaded, setArticlesLoaded] = useState<boolean>(false);
-
-    useEffect(() => {
-      const fetchTokens = async () => {
-        let response = await fetchUser(props.username, props.password)
-        let user : IUser = response[0]
-        let message : string = response[1]
-        console.log("User fetched: " + user)
-        if (message == "success") {
-          let quantity = user.tokens[0].quantity
-          debugger
-          for (let i = 0; i < user.tokens.length; i++) {
-            if (user.tokens[i].name == props.athlete.name) {
-              quantity = user.tokens[i].quantity
-            }
-          }
-          setTokensAmount(quantity)
-          setBalance(user.balance)
-          setTokens(user.tokens)
-        }
-      }  
-      fetchTokens();
-    }, [])
 
     const getCloseButton = () => {
         return (
@@ -64,82 +33,35 @@ export const Athlete = (props: IAthleteProps) => {
           <Token/>
         </TouchableOpacity>
       );
-    
-    const buyToken = async (name : string) => {
-        debugger
-        const newTokens = [...tokens]
-        let updatedToken = newTokens[0];
-        for(let i = 0; i < newTokens.length; i++){
-          if (newTokens[i].name == name) {
-            updatedToken = newTokens[i]
-            newTokens[i].quantity += 1
-            console.log("BOUGHT TOKEN")
-          }
-        }
-        if (updatedToken.price < balance) {
-          setTokens(newTokens)
-          setTokensAmount(tokensAmount + 1)
-          const newBalance = balance - updatedToken.price
-          setBalance(newBalance)
-          await saveTokens(props.username, newTokens, newBalance)
-        }
-    }
-
-    const sellToken = async (name : string) => {
-      const newTokens = [...tokens]
-      let updatedToken = newTokens[0];
-      for(let i = 0; i < newTokens.length; i++){
-        if (newTokens[i].name == name) {
-          updatedToken = newTokens[i]
-          newTokens[i].quantity -= 1
-          console.log("SOLD TOKEN")
-        }
-      }
-      if (tokensAmount > 0) {
-        setTokens(newTokens)
-        setTokensAmount(tokensAmount - 1)
-        const newBalance = balance + updatedToken.price
-        setBalance(newBalance)
-        await saveTokens(props.username, newTokens, newBalance)
-      }
-    }
 
     const getTokenVisualization = () => {
         const tokenData: any[] = [];
 
-        for(let i = 0; i < tokensAmount; i++) {
+        for(let i = 0; i < tokens; i++) {
             tokenData.push({
                 id: i,
             })
         }
 
-        return (<FlatList numColumns={props.athlete.quantity} data={tokenData} renderItem={renderItem}></FlatList>)
+        return (<FlatList numColumns={5} data={tokenData} renderItem={renderItem}></FlatList>)
     }
 
     const getUserTokenInfo = () => {
         return (
             <View>
                 <Text style={globalStyles.sectionHeader}>
-                    Your {athlete.name} Tokens
+                    Your {props.athlete.firstName} {props.athlete.lastName} Tokens
                 </Text>
                 {getTokenVisualization()}
                 <Text style={styles.tokenInfo}>
-                    You have <Text>{tokensAmount}</Text> tokens which is equivalent to <Text>${tokensAmount * props.athlete.tokenValue}</Text>
+                    You have <Text>{tokens}</Text> tokens which is equivalent to <Text>${tokens * tokenValue}</Text>
                 </Text>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                     <TouchableOpacity style={globalStyles.buttonV1}>
-                       {/* <Text style={globalStyles.buttonTextV1}>Buy</Text> */}
-                      <Button
-                          title="Buy"
-                          onPress={() => buyToken(athlete.name)}
-                      />
+                      <Text style={globalStyles.buttonTextV1}>Buy</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={globalStyles.buttonV2}>
-                        {/* <Text style={globalStyles.buttonTextV2}>Sell</Text> */}
-                        <Button
-                          title="Sell"
-                          onPress={() => sellToken(athlete.name)}
-                        />
+                        <Text style={globalStyles.buttonTextV2}>Sell</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -159,7 +81,7 @@ export const Athlete = (props: IAthleteProps) => {
       }
 
       useEffect(() => {
-        getNews(true, athlete.name+"%20", undefined, undefined)
+        getNews(true, props.athlete.name+"%20AND%20"+athlete.lastName, undefined, undefined)
           .then((res: any) => {
             console.log(res.articles)
             setArticles(res.articles)
@@ -187,7 +109,8 @@ export const Athlete = (props: IAthleteProps) => {
       </View>
         <View style={{width: '100vw', paddingHorizontal: 20}}>
             <Text style={styles.name}>
-                <Text>{athlete.name} </Text>
+                <Text>{athlete.firstName} </Text>
+                <Text>{athlete.lastName}</Text>
             </Text>
             <Text style={styles.sport}>
                 {athlete.sport}
