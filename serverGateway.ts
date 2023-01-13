@@ -13,9 +13,10 @@ const servicePath = 'user/'
 export const createUser = async (user: IUser): Promise<IUser | string> => {
     try {
     console.log('create user: ', user, baseEndpoint + servicePath + 'create')
-      return await post<IUser>(baseEndpoint + servicePath + 'create', {
+      const result = await post<IUser>(baseEndpoint + servicePath + 'create', {
         user: user,
       })
+      return result
     } catch (exception) {
       return "failed"
     }
@@ -31,13 +32,18 @@ export const fetchUsers = async (): Promise<IUser[] | string> => {
     }
 }
 
-export const fetchUser = async(username : string) : Promise<[IUser, string]> => {
+export const fetchUser = async(username : string, password: string) : Promise<[IUser, string]> => {
   try {
     console.log('fetch user: ', username, baseEndpoint + servicePath + 'user')
     let user = await post<MongoObject>(baseEndpoint + servicePath + 'user', {
-      username: username
+      username: username,
+      password: password
     });
-    return [user.user, "success"]
+    if (user.user != undefined) {
+      return [user.user, "success"]
+    } else {
+      return [new EmptyUser(), "failed"]
+    }
   } catch (exception) {
     return [new EmptyUser(), "failed"]
   }

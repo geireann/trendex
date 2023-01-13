@@ -5,7 +5,8 @@ import { StyleSheet, Text, View, Image, Button, Switch } from 'react-native';
 import { Card } from 'react-native-elements';
 
 export interface ProfileProps {
-  user: IUser
+  user: IUser,
+  setUser: any
 }
 
 export const Profile = (props: ProfileProps) => {

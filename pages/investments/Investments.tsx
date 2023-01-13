@@ -1,60 +1,49 @@
 import { useState, useEffect } from 'react';
 import { Dimensions, TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Color, FontSize, LineGraph, Timeframe, TokenType, IUser } from '../../global';
+import { Color, FontSize, LineGraph, Timeframe, TokenType, IUser, IAthlete } from '../../global';
 import { AthleteTokenCard } from '../../global/components/AthleteTokenCard';
 import { globalStyles } from '../../global/globalStyles';
 import { fetchUser, saveTokens } from '../../serverGateway'
+import { ListRenderItemInfo, FlatList } from 'react-native';
 
-export const Investments = ({setAthlete}: any) => {
+export interface InvestmentsProps {
+  setAthlete: (athlete: IAthlete | undefined) => void,
+  currentUser: IUser,
+  setUser: (user: IUser) => void
 
+}
+export const Investments = (props: InvestmentsProps) => {
   const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe._1Y)
-  const [tokenTotal, setTokenTotal] = useState<number>(0);
-  const [balance, setBalance] = useState<number>(0);
-  const [tokens, setTokens] = useState<TokenType[]>([]);
 
-  // const renderToken = (tokenInfo: ListRenderItemInfo<Token> ) : any => {
-  //   const token = tokenInfo.item;
-  //   console.log("Called getTokens" + token.name);
-  //   return (
-  //     <View 
-  //     key={token.name}
-  //     style = {{
-  //       flexDirection: "row",
-  //       height: 100,
-  //       padding: 20,
-  //       width: 500,
-  //       borderRadius : 10,
-  //       borderColor: 'black',
-  //       borderStyle: 'solid',
-  //       borderWidth: 5
-  //     }}
-  //     >
-  //       <Text style={{
-  //         fontSize: 20,
-  //         flex: .5,
-  //         color: 'red'
-  //         }}>{token.name}</Text>
-  //       <Text style={{
-  //         flex: .3
-  //       }}>{"Quantity: " + token.quantity}</Text>
-  //       <Text style={{
-  //         flex: .2
-  //       }}>{"Total value: " + token.price * token.quantity}</Text>
-  //     </View>
-  //     );
-  // }
+  const renderToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
+    const token = tokenInfo.item;
+    debugger
+    console.log("Called getTokens" + token.name);
+    const athlete = {
+      name: token.name,
+      sport: token.sport,
+      profileImageUrl: token.profileUrl,
+      tokenValue: token.price,
+      quantity: token.quantity
+    }
+    return (
+      <AthleteTokenCard setAthlete={props.setAthlete} numberTokens={token.quantity} athlete={athlete} />
+      );
+  }
 
   useEffect(() => {
     const fetchTokens = async () => {
-      let response = await fetchUser("viennatest")
+      let response = await fetchUser(props.currentUser.username, props.currentUser.password)
+      debugger
       let user : IUser = response[0]
       let message : string = response[1]
       console.log("User fetched: " + user)
       if (message == "success") {
         console.log("user tokens" + user.tokens)
-        setTokens(user.tokens)
-        setTokenTotal(calcTotal(user.tokens))
-        setBalance(user.balance)
+        let newUser = {...props.currentUser}
+        newUser.tokens = user.tokens
+        newUser.balance = user.balance
+        props.setUser(newUser)
       }
     }  
     fetchTokens();
@@ -68,38 +57,19 @@ export const Investments = ({setAthlete}: any) => {
     return total
   }
 
-  const updateTokensCount = async (name : string) => {
-    const newTokens = [...tokens]
-    let updatedToken = new TokenType("Default Value", 0, 0);
-    for(let i = 0; i < newTokens.length; i++){
-      if (tokens[i].name == name) {
-        updatedToken = tokens[i]
-        tokens[i].quantity += 1
-        console.log("UPDATED")
-      }
-    }
-    if (updatedToken.price < balance) {
-      setTokens(newTokens)
-      setTokenTotal(calcTotal(newTokens))
-      const newBalance = balance - updatedToken.price
-      setBalance(newBalance)
-      await saveTokens("viennatest", newTokens, newBalance)
-    }
-  }
 
-  const getWatchListTokens = ():JSX.Element[] => {
-    return [
-      <AthleteTokenCard setAthlete={setAthlete}/>,
-      <AthleteTokenCard setAthlete={setAthlete}/>,
-    ]
-  }
+  // const getWatchListTokens = ():JSX.Element[] => {
+  //   return [
+  //     <AthleteTokenCard setAthlete={setAthlete}/>,
+  //     <AthleteTokenCard setAthlete={setAthlete}/>,
+  //   ]
+  // }
 
-  const getTokens = ():JSX.Element[] => {
-    return [
-      <AthleteTokenCard setAthlete={setAthlete}/>,
-      <AthleteTokenCard setAthlete={setAthlete}/>,
-      <AthleteTokenCard setAthlete={setAthlete}/>,
-    ]
+  const getTokens = ():any => {
+    debugger
+    return (
+      <FlatList data = {props.currentUser.tokens} renderItem={renderToken}/>
+      );
   }
 
   const getTimelineRangeButtons = (): JSX.Element[] => {
@@ -119,7 +89,7 @@ export const Investments = ({setAthlete}: any) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.total}>${tokenTotal}</Text>
+      <Text style={styles.total}>${calcTotal(props.currentUser.tokens)}</Text>
       <LineGraph timeframe={timeframe}/>
       <View style={styles.dateBar}>
         {getTimelineRangeButtons()}
@@ -130,7 +100,7 @@ export const Investments = ({setAthlete}: any) => {
       </View>
       <View style={styles.watchlistContainer}>
         <Text style={globalStyles.sectionHeader}>My Watch List</Text>
-        {getWatchListTokens()}
+        {/* {getWatchListTokens()} */}
       </View>
     </ScrollView>
   );
