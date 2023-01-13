@@ -18,9 +18,10 @@ export interface IAthleteProps {
 
 export const Athlete = (props: IAthleteProps) => {
     const athlete = props.athlete;
-    const [tokensAmount, setTokensAmount] = useState<number>(props.athlete.quantity);
+    const [tokensAmount, setTokensAmount] = useState<number>(0);
     const [articles, setArticles] = useState<any[]>([]);
-    const [balance, setBalance] = useState<number>(0)
+    const [balance, setBalance] = useState<number>(0);
+    const [tokens, setTokens] = useState<TokenType[]>([]);
 
     const [articlesLoaded, setArticlesLoaded] = useState<boolean>(false);
 
@@ -31,9 +32,16 @@ export const Athlete = (props: IAthleteProps) => {
         let message : string = response[1]
         console.log("User fetched: " + user)
         if (message == "success") {
-          setTokensAmount(props.athlete.quantity)
+          let quantity = user.tokens[0].quantity
+          debugger
+          for (let i = 0; i < user.tokens.length; i++) {
+            if (user.tokens[i].name == props.athlete.name) {
+              quantity = user.tokens[i].quantity
+            }
+          }
+          setTokensAmount(quantity)
           setBalance(user.balance)
-          props.setTokens(user.tokens)
+          setTokens(user.tokens)
         }
       }  
       fetchTokens();
@@ -52,14 +60,14 @@ export const Athlete = (props: IAthleteProps) => {
     }
 
     const renderItem = ({item}: any) => (
-        <TouchableOpacity onPress={() => console.log('hi')}>
+        <TouchableOpacity key={item.id} onPress={() => console.log('hi')}>
           <Token/>
         </TouchableOpacity>
       );
     
     const buyToken = async (name : string) => {
-      debugger
-        const newTokens = [...props.tokens]
+        debugger
+        const newTokens = [...tokens]
         let updatedToken = newTokens[0];
         for(let i = 0; i < newTokens.length; i++){
           if (newTokens[i].name == name) {
@@ -69,7 +77,7 @@ export const Athlete = (props: IAthleteProps) => {
           }
         }
         if (updatedToken.price < balance) {
-          props.setTokens(newTokens)
+          setTokens(newTokens)
           setTokensAmount(tokensAmount + 1)
           const newBalance = balance - updatedToken.price
           setBalance(newBalance)
@@ -78,7 +86,7 @@ export const Athlete = (props: IAthleteProps) => {
     }
 
     const sellToken = async (name : string) => {
-      const newTokens = [...props.tokens]
+      const newTokens = [...tokens]
       let updatedToken = newTokens[0];
       for(let i = 0; i < newTokens.length; i++){
         if (newTokens[i].name == name) {
@@ -88,7 +96,7 @@ export const Athlete = (props: IAthleteProps) => {
         }
       }
       if (tokensAmount > 0) {
-        props.setTokens(newTokens)
+        setTokens(newTokens)
         setTokensAmount(tokensAmount - 1)
         const newBalance = balance + updatedToken.price
         setBalance(newBalance)

@@ -6,10 +6,11 @@ import { globalStyles } from '../../global/globalStyles';
 import { fetchUser, saveTokens } from '../../serverGateway'
 import { ListRenderItemInfo, FlatList } from 'react-native';
 
-export const Investments = (props: any, currentUser: IUser) => {
+export const Investments = (props: any) => {
   const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe._1Y)
   const [tokenTotal, setTokenTotal] = useState<number>(0);
   const [balance, setBalance] = useState<number>(0);
+  const [tokens, setTokens] = useState<TokenType[]>([]);
 
   const renderToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
     const token = tokenInfo.item;
@@ -29,12 +30,13 @@ export const Investments = (props: any, currentUser: IUser) => {
   useEffect(() => {
     const fetchTokens = async () => {
       let response = await fetchUser(props.currentUser.username, props.currentUser.password)
+      debugger
       let user : IUser = response[0]
       let message : string = response[1]
       console.log("User fetched: " + user)
       if (message == "success") {
         console.log("user tokens" + user.tokens)
-        props.setTokens(user.tokens)
+        setTokens(user.tokens)
         setTokenTotal(calcTotal(user.tokens))
         setBalance(user.balance)
       }
@@ -60,7 +62,7 @@ export const Investments = (props: any, currentUser: IUser) => {
 
   const getTokens = ():any => {
     return (
-      <FlatList data = {props.tokens} renderItem={renderToken}/>
+      <FlatList data = {tokens} renderItem={renderToken}/>
       );
   }
 

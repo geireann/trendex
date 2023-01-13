@@ -88,7 +88,7 @@ const TrendexTabs = (props: any) => {
           {(_) => <Discover setAthlete={props.setAthlete}/>}
         </BottomTab.Screen>
         <BottomTab.Screen name={Page.PROFILE}>
-          {(_) => <Profile />}
+          {(_) => <Profile user={props.currentUser} />}
         </BottomTab.Screen>
     </BottomTab.Navigator>
     </View>
@@ -109,6 +109,8 @@ export default function App() {
 
   const [tokens, setTokens] = useState<TokenType[]>([]);
   const [athlete, setAthlete] = useState<IAthlete | undefined>();
+  const [balance, setBalance] = useState<number>(0);
+  const [tokensAm, setTokensAmount] = useState<number>(0)
 
   const setUserProfile = (user: IUser) => { 
     setUser(user)
@@ -132,9 +134,10 @@ export default function App() {
         }}
       >
         {athlete && <Athlete balance={user.balance} username={user.username} password={user.password} setAthlete={setAthlete} 
-        athlete={athlete} tokens={tokens} setTokens={setTokens}/>}
+        athlete={athlete}  tokens={tokens} setTokens={setTokens}/>}
       </Modal>
-      <TrendexTabs setAthlete={setAthlete} setTokens={setTokens} tokens={tokens} currentUser={user}/>
+      <TrendexTabs setAthlete={setAthlete} setTokens={setTokens} tokens={tokens} currentUser={user} 
+      balance={balance} setBalance={setBalance} />
     </NavigationContainer>
   );
 }

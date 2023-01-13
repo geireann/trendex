@@ -7,7 +7,7 @@ import { IAthlete } from '../globalTypes';
 import { globalStyles } from '../globalStyles';
 
 export interface IAthleteCardProps {
-  athlete?: IAthlete,
+  athlete: IAthlete,
   setAthlete: (athlete: IAthlete | undefined) => void
 }
 
@@ -28,7 +28,7 @@ export const AthleteCard = (props: IAthleteCardProps) => {
   return (
     <TouchableOpacity style={styles.container} onPress={() => {
         console.log('pressed AthleteCard')
-        setAthlete(athlete)
+        setAthlete(props.athlete)
     }}>
       <View style={styles.profileImageContainer}>
         <Image 
@@ -39,8 +39,7 @@ export const AthleteCard = (props: IAthleteCardProps) => {
       <View style={styles.athleteBioContainer}>
         <View>
             <Text style={styles.name}>
-                <Text>{athlete.firstName} </Text>
-                <Text>{athlete.lastName}</Text>
+                <Text>{props.athlete.name} </Text>
             </Text>
             <Text style={styles.sport}>
                 {athlete.sport}
