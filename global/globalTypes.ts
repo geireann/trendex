@@ -8,6 +8,7 @@ import { Sport } from "./globalEnums"
  * its quantity, price per token, and of the name of the token.
  */
 export class TokenType {
+    id: string;
     name: string;
     quantity: number;
     price: number;
@@ -15,7 +16,8 @@ export class TokenType {
     sport: Sport;
 
 
-    constructor(name: string, quantity: number, price: number, profileUrl: string, sport: Sport) {
+    constructor(id: string, name: string, quantity: number, price: number, profileUrl: string, sport: Sport) {
+        this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.price = price;
@@ -60,10 +62,29 @@ export class EmptyUser implements IUser {
 }
 
 export interface IAthlete {
-    id?: string;
+    id: string;
     sport: Sport
     profileImageUrl: string,
     name: string,
     tokenValue: number,
     quantity: number
+}
+
+export class AthleteType implements IAthlete {
+    id: string;
+    sport: Sport;
+    profileImageUrl: string;
+    name: string;
+    tokenValue: number;
+    quantity: number;
+
+    constructor(id: string, sport: Sport, profileImageUrl: string, name: string,
+        tokenValue: number, quantity: number) {
+            this.id = id
+            this.sport = sport
+            this.profileImageUrl = profileImageUrl
+            this.name = name
+            this.tokenValue = tokenValue
+            this.quantity = quantity
+    }
 }

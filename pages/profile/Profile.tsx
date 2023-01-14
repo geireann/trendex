@@ -3,6 +3,7 @@ import { useState, useEffect} from 'react';
 import { IUser } from '../../global'
 import { StyleSheet, Text, View, Image, Button, Switch } from 'react-native';
 import { Card } from 'react-native-elements';
+import { GoblinImage } from '../../assets/MindGoblin.jpg'
 
 export interface ProfileProps {
   user: IUser,
@@ -16,9 +17,9 @@ export const Profile = (props: ProfileProps) => {
       <Text>Profile!</Text>
       <View style={styles.profileCard}>
         {/* Image source https://fantasy-bestiary.fandom.com/wiki/Goblin */}
-        <Image source={{
-          uri: "https://static.wikia.nocookie.net/mythological-supernatural-and-fantasy-creatures/images/5/5c/Ds_monsters_goblin_by_willowwisp.jpg/revision/latest?cb=20170411195537"
-        }} style={styles.profilePic}></Image>
+        <Image source={require(
+          "../../assets/MindGoblin.jpg"
+        )} style={styles.profilePic}></Image>
         <View>
           <Text style={styles.profileUsername}>{props.user.username}</Text>
           <Text>{props.user.email}</Text>
@@ -39,12 +40,15 @@ const styles = StyleSheet.create({
   },
   profileCard: {
     display: 'flex',
+    flexDirection: 'row',
+    borderStyle: 'solid',
+    borderWidth: 2
   },
   profileDescription: {
     flex: 1
   },
   profileUsername: {
-    fontSize: 4
+    fontSize: 20
   },
   profilePic: {
     height: 50,

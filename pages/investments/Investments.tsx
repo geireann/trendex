@@ -17,9 +17,9 @@ export const Investments = (props: InvestmentsProps) => {
 
   const renderToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
     const token = tokenInfo.item;
-    debugger
     console.log("Called getTokens" + token.name);
     const athlete = {
+      id: token.id,
       name: token.name,
       sport: token.sport,
       profileImageUrl: token.profileUrl,
@@ -34,7 +34,6 @@ export const Investments = (props: InvestmentsProps) => {
   useEffect(() => {
     const fetchTokens = async () => {
       let response = await fetchUser(props.currentUser.username, props.currentUser.password)
-      debugger
       let user : IUser = response[0]
       let message : string = response[1]
       console.log("User fetched: " + user)
@@ -66,9 +65,8 @@ export const Investments = (props: InvestmentsProps) => {
   // }
 
   const getTokens = ():any => {
-    debugger
     return (
-      <FlatList data = {props.currentUser.tokens} renderItem={renderToken}/>
+      <FlatList data = {props.currentUser.tokens} renderItem={renderToken} keyExtractor={item => item.id}/>
       );
   }
 

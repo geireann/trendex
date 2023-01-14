@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Switch, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, Switch, ScrollView, TouchableOpacity, FlatList, ListRenderItemInfo } from 'react-native';
 import { athletes } from '../../data';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport } from '../../global';
+import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, AthleteType } from '../../global';
 import { AthleteCard } from '../../global/components/AthleteCard';
 import { NewsCard } from '../../global/components/NewsCard';
 import { globalStyles } from '../../global/globalStyles';
@@ -49,8 +49,8 @@ export const Discover = ({setAthlete}: {
     return results;
   }
 
-  const renderItem = ({item}:any) => (
-    <AthleteCard athlete={item} setAthlete={setAthlete}/>
+  const renderItem = (item: ListRenderItemInfo<AthleteType> ) => (
+    <AthleteCard athlete={item.item} setAthlete={setAthlete}/>
   );
 
   const getLatestNews = (): JSX.Element[] => {

@@ -20,18 +20,13 @@ export const Athlete = (props: IAthleteProps) => {
 
     const [articlesLoaded, setArticlesLoaded] = useState<boolean>(false);
 
-    // useEffect(() => {
-    //   const fetchTokens = async () => {
-    //     let response = await fetchUser(props.user.username, props.user.password)
-    //     let user : IUser = response[0]
-    //     let message : string = response[1]
-    //     console.log("User fetched: " + user)
-    //     if (message == "success") {
-    //       setTokensAmount(props.athlete.quantity)
-    //     }
-    //   }  
-    //   fetchTokens();
-    // }, [])
+    useEffect(() => {
+      for (let i = 0; i < props.user.tokens.length; i++) {
+        if (props.user.tokens[i].name == athlete.name) {
+          setTokensAmount(props.user.tokens[i].quantity)
+        }
+      }
+    }, [])
 
     const getCloseButton = () => {
         return (
@@ -55,15 +50,24 @@ export const Athlete = (props: IAthleteProps) => {
       debugger
         const newTokens = [...props.user.tokens]
         let updatedToken = newTokens[0];
+        let tokenFound = false;
         for(let i = 0; i < newTokens.length; i++){
           if (newTokens[i].name == name) {
             updatedToken = newTokens[i]
+            tokenFound = true;
             newTokens[i].quantity += 1
             console.log("BOUGHT TOKEN")
           }
         }
         if (updatedToken.price < props.user.balance) {
           let newUser = {...props.user}
+          // Buy first instance of this token
+          if (!tokenFound) {
+            updatedToken = new TokenType(props.athlete.id,
+              props.athlete.name, 1, props.athlete.tokenValue,
+              props.athlete.profileImageUrl, props.athlete.sport)
+              newTokens.push(updatedToken)
+          }
           newUser.tokens = newTokens
           const newBalance = props.user.balance - updatedToken.price
           newUser.balance = newBalance
@@ -86,6 +90,9 @@ export const Athlete = (props: IAthleteProps) => {
       if (tokensAmount > 0) {
         let newUser = {...props.user}
         newUser.tokens = newTokens
+        if (tokensAmount - 1 == 0) {
+          newTokens.splice(newTokens.indexOf(updatedToken), 1)
+        }
         const newBalance = props.user.balance + updatedToken.price
         newUser.balance = newBalance
         props.setUser(newUser)

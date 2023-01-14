@@ -13,7 +13,6 @@ export interface IAthleteTokenCardProps {
 }
 
 export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
-  debugger
   const {
     athlete,
     numberTokens,
