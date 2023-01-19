@@ -99,7 +99,8 @@ export default function App() {
     password: "password",
     email: "test@trendex.com",
     balance: 100,
-    tokens: []
+    tokens: [],
+    watchlist: []
   });
 
   const [tokens, setTokens] = useState<TokenType[]>([]);

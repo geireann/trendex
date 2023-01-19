@@ -31,7 +31,8 @@ export interface IUser {
     password: string,
     email: string,
     balance: number,
-    tokens: Array<TokenType>
+    tokens: Array<TokenType>,
+    watchlist: Array<TokenType>
 }
 
 /**
@@ -51,6 +52,7 @@ export class EmptyUser implements IUser {
     email: string;
     balance: number;
     tokens: Array<TokenType>;
+    watchlist: Array<TokenType>;
 
     constructor() {
         this.username = '';
@@ -58,6 +60,7 @@ export class EmptyUser implements IUser {
         this.email = '';
         this.balance = 0;
         this.tokens = [];
+        this.watchlist = [];
     }
 }
 

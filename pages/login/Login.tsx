@@ -130,10 +130,11 @@ export const Login = (props: ILoginProps) => {
               password: encrypt(password).encryptedData,
               email: email,
               balance: 100,
-              tokens: [new TokenType("4", "Lebron James", 1, 10, "", Sport.BASKETBALL), 
-                      new TokenType("5", "Robert Lewandowski", 2, 18, "", Sport.FOOTBALL),
-                      new TokenType("6", "Kylian Mbappe", 3, 60, "", Sport.FOOTBALL)
-                    ]
+              tokens: [new TokenType("4", "Lebron James", 1, 10, "https://hoopshabit.com/wp-content/uploads/getty-images/2017/07/1448620152.jpeg", Sport.BASKETBALL), 
+                      new TokenType("5", "Robert Lewandowski", 2, 18, "https://pbs.twimg.com/profile_images/1560186554781519873/wq6vdCir_400x400.jpg", Sport.FOOTBALL),
+                      new TokenType("6", "Kylian Mbappe", 3, 60, "https://media.cnn.com/api/v1/images/stellar/prod/221229101146-mbappe-goal-psg.jpg?c=original", Sport.FOOTBALL)
+                    ],
+              watchlist: []
             })
             Alert.alert('Alert Title', 'Profile Successfully Created - Please Log In To Begin Trading', [
               {

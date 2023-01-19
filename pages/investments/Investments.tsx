@@ -16,6 +16,7 @@ export const Investments = (props: InvestmentsProps) => {
   const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe._1Y)
 
   const renderToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
+    debugger
     const token = tokenInfo.item;
     console.log("Called getTokens" + token.name);
     const athlete = {
@@ -42,6 +43,7 @@ export const Investments = (props: InvestmentsProps) => {
         let newUser = {...props.currentUser}
         newUser.tokens = user.tokens
         newUser.balance = user.balance
+        newUser.watchlist = user.watchlist
         props.setUser(newUser)
       }
     }  
@@ -57,12 +59,11 @@ export const Investments = (props: InvestmentsProps) => {
   }
 
 
-  // const getWatchListTokens = ():JSX.Element[] => {
-  //   return [
-  //     <AthleteTokenCard setAthlete={setAthlete}/>,
-  //     <AthleteTokenCard setAthlete={setAthlete}/>,
-  //   ]
-  // }
+  const getWatchListTokens = ():any => {
+    return (
+      <FlatList data = {props.currentUser.watchlist} renderItem={renderToken} keyExtractor={item => item.id}/>
+      );
+  }
 
   const getTokens = ():any => {
     return (
@@ -98,7 +99,7 @@ export const Investments = (props: InvestmentsProps) => {
       </View>
       <View style={styles.watchlistContainer}>
         <Text style={globalStyles.sectionHeader}>My Watch List</Text>
-        {/* {getWatchListTokens()} */}
+        {getWatchListTokens()}
       </View>
     </ScrollView>
   );

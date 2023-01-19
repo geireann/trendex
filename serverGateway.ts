@@ -49,7 +49,7 @@ export const fetchUser = async(username : string, password: string) : Promise<[I
   }
 }
 
-export const saveTokens = async(username: string, tokens : TokenType[], newBalance: number) => {
+export const saveTokens = async (username: string, tokens : TokenType[], newBalance: number) => {
   try {
     console.log("Saving Tokens...")
     await post(baseEndpoint + servicePath + 'savetokens', {
@@ -58,6 +58,17 @@ export const saveTokens = async(username: string, tokens : TokenType[], newBalan
       newBalance: newBalance
     })
     ;
+  } catch (exception) {
+    console.log(exception)
+  }
+}
+
+export const saveWatchlist = async (username: string, watchList : TokenType[]) => {
+  try {
+    await post(baseEndpoint + servicePath + 'savewatchlist', {
+      username: username,
+      newWatchList : watchList
+    })
   } catch (exception) {
     console.log(exception)
   }

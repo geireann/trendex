@@ -3,7 +3,7 @@ import { useState, useEffect} from 'react';
 import { IUser } from '../../global'
 import { StyleSheet, Text, View, Image, Button, Switch } from 'react-native';
 import { Card } from 'react-native-elements';
-import { GoblinImage } from '../../assets/MindGoblin.jpg'
+// import { GoblinImage } from '../../assets/MindGoblin.jpg'
 
 export interface ProfileProps {
   user: IUser,

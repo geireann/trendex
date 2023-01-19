@@ -84,6 +84,13 @@ export const globalStyles = StyleSheet.create({
         backgroundColor: '#ff66690f',
         height: 'fit-content',
       },
+      buttonV3: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+        backgroundColor: '#ff66690f',
+        height: 'fit-content',
+      },
       horizontalScroll: {
         flex: 1,
         flexDirection: 'row',

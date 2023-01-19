@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button, TouchableOpacity, StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, FontSize, getNews, globalStyles, IAthlete, IUser, TokenType} from '../../global';
+import { Color, FontSize, getNews, globalStyles, IAthlete, IUser, TokenType, Sport} from '../../global';
 import { NewsCard } from '../../global/components/NewsCard';
 import { Token } from '../../global/components/Token';
-import { fetchUser, saveTokens } from '../../serverGateway';
+import { fetchUser, saveTokens, saveWatchlist } from '../../serverGateway';
 
 export interface IAthleteProps {
     athlete: IAthlete,
@@ -49,7 +49,7 @@ export const Athlete = (props: IAthleteProps) => {
     const buyToken = async (name : string) => {
       debugger
         const newTokens = [...props.user.tokens]
-        let updatedToken = newTokens[0];
+        let updatedToken = new TokenType("", "", 0, 0, "", Sport.BASKETBALL)
         let tokenFound = false;
         for(let i = 0; i < newTokens.length; i++){
           if (newTokens[i].name == name) {
@@ -79,7 +79,7 @@ export const Athlete = (props: IAthleteProps) => {
 
     const sellToken = async (name : string) => {
       const newTokens = [...props.user.tokens]
-      let updatedToken = newTokens[0];
+      let updatedToken = new TokenType("", "", 0, 0, "", Sport.BASKETBALL)
       for(let i = 0; i < newTokens.length; i++){
         if (newTokens[i].name == name) {
           updatedToken = newTokens[i]
@@ -99,6 +99,29 @@ export const Athlete = (props: IAthleteProps) => {
         setTokensAmount(tokensAmount - 1)
         await saveTokens(props.user.username, newTokens, newBalance)
       }
+    }
+
+    const addToWatchlist = async(tokenName : string) => {
+      debugger
+      const newWatchList = [...props.user.watchlist]
+      let tokenFound = false
+      //make sure token doesn't already exist in watchlist
+      for (let i = 0; i < newWatchList.length; i++) {
+        if (newWatchList[i].name == tokenName) {
+          tokenFound = true;
+        }
+      }
+      if (!tokenFound) {
+        let newUser = {...props.user}
+        let newToken = new TokenType(props.athlete.id,
+          props.athlete.name, 1, props.athlete.tokenValue,
+          props.athlete.profileImageUrl, props.athlete.sport)
+        newWatchList.push(newToken)
+        newUser.watchlist = newWatchList
+        props.setUser(newUser)
+        await saveWatchlist(props.user.username, newWatchList)
+      }
+
     }
 
     const getTokenVisualization = () => {
@@ -124,19 +147,17 @@ export const Athlete = (props: IAthleteProps) => {
                     You have <Text>{tokensAmount}</Text> tokens which is equivalent to <Text>${tokensAmount * props.athlete.tokenValue}</Text>
                 </Text>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                    <TouchableOpacity style={globalStyles.buttonV1}>
+                    <TouchableOpacity style={globalStyles.buttonV3}>
                        {/* <Text style={globalStyles.buttonTextV1}>Buy</Text> */}
-                      <Button
-                          title="Buy"
-                          onPress={() => buyToken(athlete.name)}
-                      />
+                      <Text style={styles.buy} onPress={() => buyToken(athlete.name)}>
+                        Buy
+                      </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={globalStyles.buttonV2}>
+                    <TouchableOpacity style={globalStyles.buttonV3}>
                         {/* <Text style={globalStyles.buttonTextV2}>Sell</Text> */}
-                        <Button
-                          title="Sell"
-                          onPress={() => sellToken(athlete.name)}
-                        />
+                        <Text style={styles.sell} onPress={() => sellToken(athlete.name)}>
+                        Sell
+                      </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -190,6 +211,14 @@ export const Athlete = (props: IAthleteProps) => {
                 {athlete.sport}
             </Text>
             {getUserTokenInfo()}
+            <Text style={styles.buy}>
+              You can also add this token to your watchlist
+            </Text>
+            <TouchableOpacity style={globalStyles.buttonV3}>
+              <Text style={styles.buy} onPress={() => addToWatchlist(athlete.name)}>
+                Add to Watchlist
+              </Text>
+            </TouchableOpacity>
             <Text style={globalStyles.sectionHeader}>
                 Related News
             </Text>
@@ -220,11 +249,19 @@ const styles = StyleSheet.create({
     color: Color.TEXT_ON_DARK,
     fontWeight: '600'
   },
-  firstName: {
-
+  buy: {
+    backgroundColor: Color.VARIANT_2,
+    color: Color.TEXT_ON_DARK,
+    paddingVertical: 3,
+    paddingHorizontal: 15,
+    borderRadius: 10
   },
-  lastName: {
-
+  sell: {
+    backgroundColor: Color.VARIANT_1,
+    color: Color.TEXT_ON_DARK,
+    paddingVertical: 3,
+    paddingHorizontal: 15,
+    borderRadius: 10
   },
   sport: {
     color: Color.TEXT_ON_DARK_VARIANT,
