@@ -6,6 +6,7 @@ import { Color, FontSize, LoginInput, IUser, TokenType, Sport} from '../../globa
 import { createUser, fetchUser, fetchUsers} from '../../serverGateway';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import {crypto, key, iv} from '../../App'
+import { Turbulence } from '@shopify/react-native-skia';
 
 
 // Crypto source https://www.tutorialspoint.com/encrypt-and-decrypt-data-in-nodejs
@@ -47,6 +48,7 @@ export const Login = (props: ILoginProps) => {
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
 
   const toggleSwitch = () => {
@@ -84,11 +86,13 @@ export const Login = (props: ILoginProps) => {
         title={"Username"}
         onChangeText={setUsername}
         value={username}
+        secure={false}
       />
       <LoginInput
         title={"Password"}
         onChangeText={setPassword}
         value={password}
+        secure={true}
       />
       <Button
         title="Login"
@@ -106,44 +110,52 @@ export const Login = (props: ILoginProps) => {
           title={"Email"}
           onChangeText={setEmail}
           value={email}
+          secure={false}
         />
         <LoginInput
           title={"Username"}
           onChangeText={setUsername}
           value={username}
+          secure={false}
         />
         <LoginInput
           title={"Password"}
           onChangeText={setPassword}
+          secure={true}
           value={password}
         />
         <LoginInput
           title={"Confirm Password"}
-          onChangeText={setPassword}
-          value={password}
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+          secure={true}
         />
         <Button
           title="Sign Up"
           onPress={() => {
-            createUser({
-              username: username.trim().toLowerCase(),
-              password: encrypt(password).encryptedData,
-              email: email,
-              balance: 100,
-              tokens: [new TokenType("4", "Lebron James", 1, 10, "https://hoopshabit.com/wp-content/uploads/getty-images/2017/07/1448620152.jpeg", Sport.BASKETBALL), 
-                      new TokenType("5", "Robert Lewandowski", 2, 18, "https://pbs.twimg.com/profile_images/1560186554781519873/wq6vdCir_400x400.jpg", Sport.FOOTBALL),
-                      new TokenType("6", "Kylian Mbappe", 3, 60, "https://media.cnn.com/api/v1/images/stellar/prod/221229101146-mbappe-goal-psg.jpg?c=original", Sport.FOOTBALL)
-                    ],
-              watchlist: []
-            })
-            Alert.alert('Alert Title', 'Profile Successfully Created - Please Log In To Begin Trading', [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              {text: 'OK', onPress: () => console.log('OK Pressed')},
-            ])
+            if (password == confirmPassword) {
+              createUser({
+                username: username.trim().toLowerCase(),
+                password: encrypt(password).encryptedData,
+                email: email,
+                balance: 100,
+                tokens: [new TokenType("4", "Lebron James", 1, 10, "https://hoopshabit.com/wp-content/uploads/getty-images/2017/07/1448620152.jpeg", Sport.BASKETBALL), 
+                        new TokenType("5", "Robert Lewandowski", 2, 18, "https://pbs.twimg.com/profile_images/1560186554781519873/wq6vdCir_400x400.jpg", Sport.FOOTBALL),
+                        new TokenType("6", "Kylian Mbappe", 3, 60, "https://media.cnn.com/api/v1/images/stellar/prod/221229101146-mbappe-goal-psg.jpg?c=original", Sport.FOOTBALL)
+                      ],
+                watchlist: []
+              })
+              Alert.alert('Alert Title', 'Profile Successfully Created - Please Log In To Begin Trading', [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ])
+            } else {
+              Alert.alert("Password do not match", "Passwords do not match")
+            }
           }}
           color={Color.VARIANT_1}
         />

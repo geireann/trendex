@@ -7,11 +7,12 @@ export interface ILoginInput {
     title: string,
     value: string,
     onChangeText: any,
+    secure: boolean
 }
 
 export const LoginInput = (props: ILoginInput) => {
 
-  const { title, value, onChangeText } = props;
+  const { title, value, onChangeText, secure } = props;
   return (
     <View style={styles.container}>
       <Text style={styles.section}>{title}</Text>
@@ -19,6 +20,7 @@ export const LoginInput = (props: ILoginInput) => {
       style={styles.input}
       onChangeText={onChangeText}
       value={value}
+      secureTextEntry={secure}
       ></TextInput>
     </View>
   );
