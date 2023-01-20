@@ -7,7 +7,7 @@ import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, Athlete
 import { AthleteCard } from '../../global/components/AthleteCard';
 import { NewsCard } from '../../global/components/NewsCard';
 import { globalStyles } from '../../global/globalStyles';
-import { getNews } from '../../global/globalUtils';
+import { getFlagEmoji, getNews } from '../../global/globalUtils';
 
 export const Discover = ({setAthlete}: {
   setAthlete: (athlete: IAthlete | undefined) => void
@@ -37,7 +37,7 @@ export const Discover = ({setAthlete}: {
 
     Object.values(NewsCountry).forEach((value, ind) => {
       filters.push(<TouchableOpacity style={newsCountry === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setNewsCountry(value as NewsCountry)}>
-        <Text style={newsCountry === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{value}</Text>
+        <Text style={newsCountry === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{getFlagEmoji(value)}</Text>
       </TouchableOpacity>)
     })
 

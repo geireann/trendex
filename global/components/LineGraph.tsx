@@ -26,8 +26,7 @@ export const LineGraph = (props: ILineGraph) => {
 
   const {timeframe, data = dummyData()} = props;
 
-  const getData = (): string[] => {
-    
+  const getLabels = (): string[] => {
     switch(timeframe) {
       case Timeframe._1Y:
         return ["Jan", "", "Mar", "", "May", "", "Jul", "", "Sep", "", "Nov", ""];
@@ -40,12 +39,30 @@ export const LineGraph = (props: ILineGraph) => {
     }
   }
 
+  const getData = (): number[] => {
+    
+    switch(timeframe) {
+      case Timeframe._1Y:
+        return [];
+      case Timeframe._6M:
+        return [];
+      case Timeframe._3M:
+          return [];
+      default:
+        return []
+    }
+  }
+
   return (
     <View style={styles.container}>
         <LineChart
                 data={{
-                  labels: [],
-                  datasets: []
+                  labels: getLabels(),
+                  datasets: [
+                    {
+                      data: getData()
+                    }
+                  ]
                 }}
                 width={Dimensions.get("window").width - 40} // from react-native
                 height={200}

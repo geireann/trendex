@@ -89,7 +89,7 @@ export const Investments = (props: InvestmentsProps) => {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.total}>{getCurrencyVal(calcTotal(props.currentUser.tokens))}</Text>
-      {/* <LineGraph timeframe={timeframe}/> */}
+      <LineGraph timeframe={timeframe}/>
       <View style={styles.dateBar}>
         {getTimelineRangeButtons()}
       </View>
@@ -124,16 +124,17 @@ const styles = StyleSheet.create({
   dateBar: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginLeft: 10
+    marginLeft: 10,
+    marginTop: 40
   },
   tokenContainer: {
-    flex: 1,
     flexDirection: 'column',
+    marginTop: 20
   },
   watchlistContainer: {
     flex: 1,
     flexDirection: 'column',
     marginBottom: 20,
-    marginTop: 50
+    marginTop: 30
   }});
   
