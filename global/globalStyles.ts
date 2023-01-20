@@ -6,7 +6,7 @@ export const globalStyles = StyleSheet.create({
       fontSize: FontSize.SECTION,
       color: Color.TEXT_ON_DARK,
       fontWeight: "600",
-      marginTop: 20,
+      marginTop: 15,
       marginBottom: 10,
       alignSelf: 'flex-start',
     },
@@ -87,7 +87,7 @@ export const globalStyles = StyleSheet.create({
       horizontalScroll: {
         flex: 1,
         flexDirection: 'row',
-        minHeight: 'fit-content',
+        minHeight: 30,
         marginBottom: 10,
         paddingBottom: 5
       }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, TouchableOpacity, StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, FontSize, getNews, globalStyles, IAthlete } from '../../global';
+import { Color, FontSize, getCurrencyVal, getNews, globalStyles, IAthlete } from '../../global';
 import { NewsCard } from '../../global/components/NewsCard';
 import { Token } from '../../global/components/Token';
 
@@ -54,7 +54,7 @@ export const Athlete = ({setAthlete, athlete}: IAthleteProps) => {
                 </Text>
                 {getTokenVisualization()}
                 <Text style={styles.tokenInfo}>
-                    You have <Text>{tokens}</Text> tokens which is equivalent to <Text>${tokens * tokenValue}</Text>
+                    You have <Text>{tokens}</Text> tokens which is equivalent to <Text>{getCurrencyVal(tokens * tokenValue)}</Text>
                 </Text>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
                     <TouchableOpacity style={globalStyles.buttonV1}>
@@ -104,7 +104,7 @@ export const Athlete = ({setAthlete, athlete}: IAthleteProps) => {
           style={styles.profileImage}
         ></Image>
         <Text style={styles.token}>
-            1TOK = ${athlete.tokenValue}
+            1TOK = {athlete.tokenValue && getCurrencyVal(athlete.tokenValue)}
         </Text>
       </View>
         <View style={{width: '100vw', paddingHorizontal: 20}}>

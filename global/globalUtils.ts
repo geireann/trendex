@@ -23,3 +23,7 @@ export const getNews = async (everything: boolean, query?: string, newsCategory?
         return response.json()
     }
   }
+
+export const getCurrencyVal = (val: number): string => {
+    return "$" + val.toFixed(2);
+}

@@ -44,25 +44,50 @@ export const Discover = ({setAthlete}: {
     return filters;
   }
 
-  const getSearchResults = (): JSX.Element[] => {
-    const results: JSX.Element[] = [];
-    return results;
+  const getSearchResults = (): JSX.Element => {
+    return <FlatList
+        data={athletes}
+        renderItem={({item}) => renderItem(item, true)}
+        numColumns={1}
+        keyExtractor={item => item.id + 'search'}
+        style={{
+          width: '100vw',
+        }}
+      />
   }
 
-  const renderItem = ({item}:any) => (
-    <AthleteCard athlete={item} setAthlete={setAthlete}/>
+  const renderItem = (item:any, fullWidth?: boolean) => (
+    <AthleteCard athlete={item} setAthlete={setAthlete} fullWidth={fullWidth}/>
   );
 
-  const getLatestNews = (): JSX.Element[] => {
+  const renderNewsItem = (item:any, fullWidth: boolean) => {
+    console.log(item)
+    return <NewsCard {...item}/>
+  };
+
+  const getLatestNews = (): JSX.Element => {
     const latestNewsItems: JSX.Element[] = [];
     
     articles.forEach((article, index) => {
+      // console.log(article)
       latestNewsItems.push(
         <NewsCard {...article}/>
       )
     })
 
-    return latestNewsItems;
+    return (
+      <FlatList
+        data={articles}
+        renderItem={({item}) => renderNewsItem(item, true)}
+        numColumns={1}
+        keyExtractor={item => item.url + 'news'}
+        style={{
+          width: '100vw',
+        }}
+      />
+    )
+
+    // return latestNewsItems;
   }
 
   useEffect(() => {
@@ -102,9 +127,9 @@ export const Discover = ({setAthlete}: {
       </Text>
       <FlatList
         data={athletes}
-        renderItem={renderItem}
+        renderItem={({item}) => renderItem(item, false)}
         numColumns={2}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id + 'trending'}
         style={{
           width: '100vw',
           left: -20

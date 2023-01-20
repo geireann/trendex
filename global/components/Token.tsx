@@ -2,6 +2,7 @@ import { Icon } from '@rneui/base/dist/Icon';
 import { StyleSheet, TextInput, View, Text } from 'react-native';
 import { Color, FontSize } from '../globalEnums';
 import { globalStyles } from '../globalStyles';
+import { getCurrencyVal } from '../globalUtils';
 
 export interface IToken {
     value?: number
@@ -15,7 +16,7 @@ export const Token = (props: IToken) => {
     <View style={styles.container}>
         <View style={styles.innerContainer}>
             {value && <Text style={styles.tokenValue}>
-                ${value}
+                {getCurrencyVal(value)}
           </Text>}
         </View>
     </View>
@@ -44,6 +45,7 @@ export const styles = StyleSheet.create({
     },
     tokenValue: {
         color: Color.TEXT_ON_DARK,
+        fontSize: FontSize.BODY,
         textAlign: 'center',
         fontWeight: "600",
       },

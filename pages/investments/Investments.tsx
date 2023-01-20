@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Dimensions, TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Color, FontSize, LineGraph, Timeframe } from '../../global';
+import { Color, FontSize, getCurrencyVal, LineGraph, Timeframe } from '../../global';
 import { AthleteTokenCard } from '../../global/components/AthleteTokenCard';
 import { globalStyles } from '../../global/globalStyles';
 
@@ -41,7 +41,10 @@ export const Investments = ({setAthlete}: any) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.total}>${tokenTotal}</Text>
+      <Text style={styles.total}>
+        <Text>{getCurrencyVal(tokenTotal)}</Text>
+        <Text></Text>
+      </Text>
       <LineGraph timeframe={timeframe}/>
       <View style={styles.dateBar}>
         {getTimelineRangeButtons()}

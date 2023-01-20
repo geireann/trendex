@@ -5,6 +5,7 @@ import { Color, FontSize, Sport } from '../globalEnums';
 import { Icon } from '@rneui/themed';
 import { IAthlete } from '../globalTypes';
 import { Token } from './Token';
+import { getCurrencyVal } from '../globalUtils';
 
 export interface IAthleteTokenCardProps {
   athlete?: IAthlete,
@@ -58,7 +59,7 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
           </Text>
           <Token value={athlete.tokenValue}/>
           <Text style={styles.totalAmount}>
-            = ${athlete.tokenValue && (userTokens * athlete.tokenValue).toFixed(2)}
+            = {athlete.tokenValue && getCurrencyVal(userTokens * athlete.tokenValue)}
           </Text>
         </View>
           {/* <Text style={styles.tokenLabel}>tokens</Text> */}
