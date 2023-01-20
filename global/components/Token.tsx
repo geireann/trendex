@@ -5,18 +5,22 @@ import { globalStyles } from '../globalStyles';
 import { getCurrencyVal } from '../globalUtils';
 
 export interface IToken {
-    value?: number
+    value?: number,
+    amount?: number,
 }
 
 export const Token = (props: IToken) => {
 
-    const {value} = props;
+    const {value, amount} = props;
 
   return (
     <View style={styles.container}>
         <View style={styles.innerContainer}>
             {value && <Text style={styles.tokenValue}>
                 {getCurrencyVal(value)}
+          </Text>}
+          {amount && <Text style={styles.tokenAmount}>
+                {amount}
           </Text>}
         </View>
     </View>
@@ -29,8 +33,12 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: Color.VARIANT_2,
+        width: 50,
+        height: 50,
         minWidth: 50,
         minHeight: 50,
+        maxWidth: 50,
+        maxHeight: 50,
         borderRadius: 50,
         margin: 3
     },
@@ -38,6 +46,8 @@ export const styles = StyleSheet.create({
         backgroundColor: Color.VARIANT_1,
         width: 40,
         height: 40,
+        maxWidth: 40,
+        maxHeight: 40,
         borderRadius: 40,
         justifyContent: 'center',
         alignItems: 'center',
@@ -48,5 +58,11 @@ export const styles = StyleSheet.create({
         fontSize: FontSize.BODY,
         textAlign: 'center',
         fontWeight: "600",
+      },
+      tokenAmount: {
+        color: Color.TEXT_ON_DARK,
+        fontSize: FontSize.LARGE,
+        textAlign: 'center',
+        fontWeight: "800",
       },
 });
