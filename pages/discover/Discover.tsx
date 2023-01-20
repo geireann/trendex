@@ -1,9 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Switch, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, Switch, ScrollView, TouchableOpacity, FlatList, ListRenderItemInfo } from 'react-native';
 import { athletes } from '../../data';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport } from '../../global';
+import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, AthleteType } from '../../global';
 import { AthleteCard } from '../../global/components/AthleteCard';
 import { NewsCard } from '../../global/components/NewsCard';
 import { globalStyles } from '../../global/globalStyles';
@@ -47,7 +47,7 @@ export const Discover = ({setAthlete}: {
   const getSearchResults = (): JSX.Element => {
     return <FlatList
         data={athletes}
-        renderItem={({item}) => renderItem(item, true)}
+        renderItem={(item) => renderItem(item, true)}
         numColumns={1}
         keyExtractor={item => item.id + 'search'}
         style={{
@@ -56,8 +56,8 @@ export const Discover = ({setAthlete}: {
       />
   }
 
-  const renderItem = (item:any, fullWidth?: boolean) => (
-    <AthleteCard athlete={item} setAthlete={setAthlete} fullWidth={fullWidth}/>
+  const renderItem = (item: ListRenderItemInfo<AthleteType>, fullWidth?: boolean) => (
+    <AthleteCard athlete={item.item} setAthlete={setAthlete} fullWidth={fullWidth}/>
   );
 
   const renderNewsItem = (item:any, fullWidth: boolean) => {
@@ -127,7 +127,7 @@ export const Discover = ({setAthlete}: {
       </Text>
       <FlatList
         data={athletes}
-        renderItem={({item}) => renderItem(item, false)}
+        renderItem={(item) => renderItem(item, false)}
         numColumns={2}
         keyExtractor={item => item.id + 'trending'}
         style={{

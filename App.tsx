@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import { Button, Modal, StyleSheet, View } from 'react-native';
 import { Discover, Investments, Login, Profile } from './pages';
+import { Button, Modal, StyleSheet, View } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
-import { Color, IAthlete, IUser, Sport } from './global';
+import { Color, IAthlete, IUser, Sport, TokenType} from './global';
 import { BlurView } from 'expo-blur';
 import './config/firebase';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -13,6 +13,11 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { Header } from './global/components/Header';
 import { Athlete } from './pages/athlete';
 
+export const crypto = require('crypto');
+const algorithm = 'aes-256-cbc'; //Using AES encryption
+//make these not hardcoded later lol
+export const key = "85e6fa2c3c04586c3bb7a4132b42a42e"
+export const iv = "ca39fbde137357be"
 
 export enum Page {
   LOGIN = 'Login',
@@ -22,10 +27,12 @@ export enum Page {
   DISCOVER = 'Discover',
 }
 
+
 const BottomTab = createBottomTabNavigator();
 const UserStack = createNativeStackNavigator();
 
-const TrendexTabs = ({setAthlete}: any) => {
+const TrendexTabs = (props: any) => {
+
   return (
     <View style={styles.container}>
     <BottomTab.Navigator
@@ -70,13 +77,13 @@ const TrendexTabs = ({setAthlete}: any) => {
         )
       })}>
         <BottomTab.Screen name={Page.INVESTMENTS}>
-          {(props) => <Investments setAthlete={setAthlete}/>}
+          {(_) => <Investments setAthlete={props.setAthlete} currentUser={props.currentUser} setUser={props.setUser}/>}
         </BottomTab.Screen>
         <BottomTab.Screen name={Page.DISCOVER}>
-          {(props) => <Discover setAthlete={setAthlete}/>}
+          {(_) => <Discover setAthlete={props.setAthlete}/>}
         </BottomTab.Screen>
         <BottomTab.Screen name={Page.PROFILE}>
-          {(props) => <Profile />}
+          {(_) => <Profile user={props.currentUser} setUser={props.setUser}/>}
         </BottomTab.Screen>
     </BottomTab.Navigator>
     </View>
@@ -90,40 +97,25 @@ export default function App() {
   const [user, setUser] = useState<IUser>({
     username: "username",
     password: "password",
-    email: "test@trendex.com"
+    email: "test@trendex.com",
+    balance: 100,
+    tokens: [],
+    watchlist: []
   });
 
+  const [tokens, setTokens] = useState<TokenType[]>([]);
   const [athlete, setAthlete] = useState<IAthlete | undefined>();
+  const [balance, setBalance] = useState<number>(0);
 
-  // Handle user state changes
-  // function onAuthStateChangedTrigger(user: any) {
-  //   console.log("user: ", user);
-  //   setUser(user);
-  //   if (initializing) setInitializing(false);
-  // }
-  // const auth = getAuth();
-
-  // console.log(auth);
-
-  // useEffect(() => {
-  //   const subscriber = onAuthStateChanged(auth, onAuthStateChangedTrigger);
-  //   return subscriber; // unsubscribe on unmount
-  // }, []);
-
-  // if (initializing) return null;
-
-  const setUserProfile = (username: string, password: string) => { 
-    setUser({
-      username: username,
-      password: password,
-      email: username
-    })
-    console.log(username, password);
+  const setUserProfile = (user: IUser) => { 
+    setUser(user)
+    console.log(user.username)
   }
 
-  if (!user) {
+  if (user.username == "username") {
     return <Login setUser={setUserProfile}/>
   } 
+  
   
   return (
     <NavigationContainer>
@@ -136,9 +128,10 @@ export default function App() {
           setAthlete(undefined);
         }}
       >
-        {athlete && <Athlete setAthlete={setAthlete} athlete={athlete}/>}
+        {athlete && <Athlete user={user} setUser={setUser} setAthlete={setAthlete} 
+        athlete={athlete} />}
       </Modal>
-      <TrendexTabs setAthlete={setAthlete}/>
+      <TrendexTabs setAthlete={setAthlete} currentUser={user} setUser={setUser}/>
     </NavigationContainer>
   );
 }
