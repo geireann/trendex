@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, Switch, ScrollView, TouchableOpacity, FlatList, ListRenderItemInfo } from 'react-native';
 import { athletes } from '../../data';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, AthleteType } from '../../global';
+import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, AthleteType, FontSize } from '../../global';
 import { AthleteCard } from '../../global/components/AthleteCard';
 import { NewsCard } from '../../global/components/NewsCard';
 import { globalStyles } from '../../global/globalStyles';
@@ -51,6 +51,13 @@ let searchResults: AthleteType[] = athletes;
       searchResults = searchResults.filter((res) => {
         return res.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1; 
     })
+
+    if (searchResults.length === 0) {
+      return <Text style={styles.noResults}>
+        No results match your search query.
+      </Text>
+    }
+
     return <FlatList
         data={searchResults}
         renderItem={(item) => renderItem(item, true)}
@@ -179,5 +186,9 @@ const styles = StyleSheet.create({
   },
   trendingContainer: {
     flexDirection: 'column',
+  },
+  noResults: {
+    fontSize: FontSize.BODY_LARGE,
+    color: Color.TEXT_ON_DARK_VARIANT
   }
 });
