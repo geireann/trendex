@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Dimensions, TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Color, FontSize, LineGraph, Timeframe, TokenType, IUser, IAthlete } from '../../global';
+import { Color, FontSize, getCurrencyVal, LineGraph, Timeframe, TokenType, IUser, IAthlete } from '../../global';
 import { AthleteTokenCard } from '../../global/components/AthleteTokenCard';
 import { globalStyles } from '../../global/globalStyles';
 import { fetchUser, saveTokens } from '../../serverGateway'
@@ -16,20 +16,21 @@ export const Investments = (props: InvestmentsProps) => {
   const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe._1Y)
 
   const renderToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
-    debugger
+    // debugger
     const token = tokenInfo.item;
     console.log("Called getTokens" + token.name);
-    const athlete = {
+    const athlete: IAthlete = {
       id: token.id,
       name: token.name,
       sport: token.sport,
       profileImageUrl: token.profileUrl,
       tokenValue: token.price,
-      quantity: token.quantity
+      quantity: token.quantity,
+      historicalTokenData: []
     }
     return (
       <AthleteTokenCard setAthlete={props.setAthlete} numberTokens={token.quantity} athlete={athlete} />
-      );
+      )
   }
 
   useEffect(() => {
@@ -88,7 +89,7 @@ export const Investments = (props: InvestmentsProps) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.total}>${calcTotal(props.currentUser.tokens)}</Text>
+      <Text style={styles.total}>{getCurrencyVal(calcTotal(props.currentUser.tokens))}</Text>
       <LineGraph timeframe={timeframe}/>
       <View style={styles.dateBar}>
         {getTimelineRangeButtons()}
@@ -124,16 +125,17 @@ const styles = StyleSheet.create({
   dateBar: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginLeft: 10
+    marginLeft: 10,
+    marginTop: 40
   },
   tokenContainer: {
-    flex: 1,
     flexDirection: 'column',
+    marginTop: 20
   },
   watchlistContainer: {
     flex: 1,
     flexDirection: 'column',
     marginBottom: 20,
-    marginTop: 50
+    marginTop: 30
   }});
   

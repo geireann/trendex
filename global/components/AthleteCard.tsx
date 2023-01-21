@@ -8,7 +8,8 @@ import { globalStyles } from '../globalStyles';
 
 export interface IAthleteCardProps {
   athlete: IAthlete,
-  setAthlete: (athlete: IAthlete | undefined) => void
+  setAthlete: (athlete: IAthlete | undefined) => void,
+  fullWidth?: boolean
 }
 
 export const AthleteCard = (props: IAthleteCardProps) => {
@@ -21,12 +22,13 @@ export const AthleteCard = (props: IAthleteCardProps) => {
       lastName: "James",
       profileImageUrl: "https://hoopshabit.com/wp-content/uploads/getty-images/2017/07/1448620152.jpeg"
     },
-    setAthlete
+    setAthlete,
+    fullWidth
   } = props;
 
 
   return (
-    <TouchableOpacity style={styles.container} onPress={() => {
+    <TouchableOpacity style={fullWidth ? styles.containerFullWidth : styles.container} onPress={() => {
         console.log('pressed AthleteCard')
         setAthlete(props.athlete)
     }}>
@@ -68,6 +70,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 10
   },
+  containerFullWidth: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: Color.GRAY_2,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    minHeight: 80,
+    borderColor: Color.VARIANT_2,
+    borderWidth: 2,
+    borderStyle: 'solid',
+    width: '90vw',
+    overflow: 'hidden',
+    borderRadius: 10,
+    marginVertical: 10
+  },
   name: {
     color: Color.TEXT_ON_DARK,
     fontWeight: "600",
@@ -85,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   profileImage: {
-    width: 100,
+    width: '100%',
     height: 100
   },
   athleteBioContainer: {

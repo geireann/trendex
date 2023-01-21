@@ -23,3 +23,16 @@ export const getNews = async (everything: boolean, query?: string, newsCategory?
         return response.json()
     }
   }
+
+export const getCurrencyVal = (val: number): string => {
+    return "$" + val.toFixed(2);
+}
+
+export const getFlagEmoji = (countryCode: string) => {
+    if (countryCode === "All") return "All"
+    const codePoints = countryCode
+      .toUpperCase()
+      .split('')
+      .map(char =>  127397 + char.charCodeAt(0));
+    return String.fromCodePoint(...codePoints);
+  }

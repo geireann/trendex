@@ -7,16 +7,16 @@ import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, Athlete
 import { AthleteCard } from '../../global/components/AthleteCard';
 import { NewsCard } from '../../global/components/NewsCard';
 import { globalStyles } from '../../global/globalStyles';
-import { getNews } from '../../global/globalUtils';
+import { getFlagEmoji, getNews } from '../../global/globalUtils';
 
 export const Discover = ({setAthlete}: {
   setAthlete: (athlete: IAthlete | undefined) => void
 }) => {
 
   const [searchValue, setSearchValue] = useState<string>('');
-  const [categoryFilter, setCategoryFitler] = useState<Sport>();
+  const [categoryFilter, setCategoryFitler] = useState<Sport>(Sport.ALL);
   const [newsCategory, setNewsCategory] = useState<NewsCategory>(NewsCategory.SPORT);
-  const [newsCountry, setNewsCountry] = useState<NewsCountry>();
+  const [newsCountry, setNewsCountry] = useState<NewsCountry>(NewsCountry.All);
   const [articles, setArticles] = useState<any[]>([]);
   const [articlesLoaded, setArticlesLoaded] = useState<boolean>(false);
 
@@ -37,48 +37,102 @@ export const Discover = ({setAthlete}: {
 
     Object.values(NewsCountry).forEach((value, ind) => {
       filters.push(<TouchableOpacity style={newsCountry === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setNewsCountry(value as NewsCountry)}>
-        <Text style={newsCountry === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{value}</Text>
+        <Text style={newsCountry === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{getFlagEmoji(value)}</Text>
       </TouchableOpacity>)
     })
 
     return filters;
   }
 
-  const getSearchResults = (): JSX.Element[] => {
-    const results: JSX.Element[] = [];
-    return results;
+  const getSearchResults = (): JSX.Element => {
+
+    
+let searchResults: AthleteType[] = athletes;
+      searchResults = searchResults.filter((res) => {
+        return res.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1; 
+    })
+    return <FlatList
+        data={searchResults}
+        renderItem={(item) => renderItem(item, true)}
+        numColumns={1}
+        keyExtractor={item => item.id + 'search'}
+        style={{
+          width: '100vw',
+        }}
+      />
   }
 
-  const renderItem = (item: ListRenderItemInfo<AthleteType> ) => (
-    <AthleteCard athlete={item.item} setAthlete={setAthlete}/>
+  const renderItem = (item: ListRenderItemInfo<AthleteType>, fullWidth?: boolean) => (
+    <AthleteCard athlete={item.item} setAthlete={setAthlete} fullWidth={fullWidth}/>
   );
 
-  const getLatestNews = (): JSX.Element[] => {
+  const renderNewsItem = (item:any, fullWidth: boolean) => {
+    console.log(item)
+    return <NewsCard {...item}/>
+  };
+
+  const getLatestNews = (): JSX.Element => {
     const latestNewsItems: JSX.Element[] = [];
     
     articles.forEach((article, index) => {
+      // console.log(article)
       latestNewsItems.push(
         <NewsCard {...article}/>
       )
     })
 
-    return latestNewsItems;
+    return (
+      <FlatList
+        data={articles}
+        renderItem={({item}) => renderNewsItem(item, true)}
+        numColumns={1}
+        keyExtractor={item => item.url + 'news'}
+        style={{
+          width: '100vw',
+        }}
+      />
+    )
+
+    // return latestNewsItems;
   }
 
   useEffect(() => {
-    // getNews(false, undefined, NewsCategory.SPORT, NewsCountry.UnitedStates)
-    //   .then((res: any) => {
-    //     console.log(res.articles)
-    //     setArticles(res.articles)
-    //     setArticlesLoaded(true)
-    //   })
-    //   .catch((e) => {
-    //     console.log(e.message)
-    //   })
+    let countryFilter: NewsCountry | undefined = newsCountry;
+    if (newsCountry === NewsCountry.All) countryFilter = undefined
+    getNews(false, undefined, NewsCategory.SPORT, countryFilter)
+      .then((res: any) => {
+        console.log(res.articles)
+        setArticles(res.articles)
+        setArticlesLoaded(true)
+      })
+      .catch((e) => {
+        console.log(e.message)
+      })
     
-    setArticles(dummyArticles)
-    setArticlesLoaded(true)
-  },[])
+    // setArticles(dummyArticles)
+    // setArticlesLoaded(true)
+  },[newsCountry])
+
+  const getTrendingAthletes = () => {
+    let trendingAthletes: AthleteType[] = athletes;
+    if (categoryFilter !== Sport.ALL) {
+      trendingAthletes = trendingAthletes.filter((val: AthleteType) => {
+        return (val.sport === categoryFilter);
+      })
+    }
+    return (
+      <FlatList
+        data={trendingAthletes}
+        renderItem={(item) => renderItem(item, false)}
+        numColumns={2}
+        keyExtractor={item => item.id + 'trending'}
+        style={{
+          width: '100vw',
+          left: -20
+        }}
+      />
+    )
+  }
   
   return (
     <ScrollView style={styles.container}>
@@ -89,7 +143,7 @@ export const Discover = ({setAthlete}: {
       <ScrollView horizontal={true} style={globalStyles.horizontalScroll}>
         {getCategoryFilters()}
       </ScrollView>
-      {searchValue.length > 2 && 
+      {searchValue.length > 0 && 
         <View>
           <Text style={globalStyles.sectionHeader}>
             Search Results
@@ -100,16 +154,7 @@ export const Discover = ({setAthlete}: {
       <Text style={globalStyles.sectionHeader}>
         Trending Athletes
       </Text>
-      <FlatList
-        data={athletes}
-        renderItem={renderItem}
-        numColumns={2}
-        keyExtractor={item => item.id}
-        style={{
-          width: '100vw',
-          left: -20
-        }}
-      />
+      {getTrendingAthletes()}
       <Text style={globalStyles.sectionHeader}>
         Latest News
       </Text>

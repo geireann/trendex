@@ -6,7 +6,7 @@ export const globalStyles = StyleSheet.create({
       fontSize: FontSize.SECTION,
       color: Color.TEXT_ON_DARK,
       fontWeight: "600",
-      marginTop: 20,
+      marginTop: 15,
       marginBottom: 10,
       alignSelf: 'flex-start',
     },
@@ -69,6 +69,7 @@ export const globalStyles = StyleSheet.create({
         paddingVertical: 3,
         paddingHorizontal: 15,
         borderRadius: 10,
+        maxWidth: 'fit-content',
         marginRight: 5,
         border: `solid 1px ${Color.VARIANT_3}`,
         backgroundColor: '#cceec60f',
@@ -80,6 +81,7 @@ export const globalStyles = StyleSheet.create({
         paddingVertical: 3,
         paddingHorizontal: 15,
         borderRadius: 10,
+        maxWidth: 'fit-content',
         border: `solid 1px ${Color.VARIANT_2}`,
         backgroundColor: '#ff66690f',
         height: 'fit-content',
@@ -94,7 +96,7 @@ export const globalStyles = StyleSheet.create({
       horizontalScroll: {
         flex: 1,
         flexDirection: 'row',
-        minHeight: 'fit-content',
+        minHeight: 30,
         marginBottom: 10,
         paddingBottom: 5
       }

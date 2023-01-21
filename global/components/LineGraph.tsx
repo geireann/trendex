@@ -2,45 +2,31 @@ import { Dimensions, StyleSheet, View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Color, Timeframe } from '../globalEnums';
 
+export interface IDataPoint {
+  numVal?: number,
+  date?: Date
+}
+
 export interface ILineGraph {
-  timeframe: Timeframe,
-  data?: number[]
+  timeframe?: Timeframe,
+  data?: IDataPoint[]
 }
 
 export const LineGraph = (props: ILineGraph) => {
 
-  const getData = (): number[] => {
-    let data = [
-      Math.random() * 100,
-      102.11,
-      85.42,
-      95.42,
-      101.12,
-      84.32,
-      76.62,
-      64.02,
-      50.42,
-      65.32,
-      80.21,
-      72.34,
-    ];
+  const dummyData = (): IDataPoint[] => {
     switch(timeframe) {
       case Timeframe._1Y:
-        return data;
       case Timeframe._6M:
-        data = data.slice(-6);
-        return data;
       case Timeframe._3M:
-        data = data.slice(-3);
-        return data;
       default:
-        return data;
+        return [];
     }
   }
 
-  const {timeframe, data = getData()} = props;
+  const {timeframe, data = dummyData()} = props;
 
-  const getTimeFrame = (): string[] => {
+  const getLabels = (): string[] => {
     switch(timeframe) {
       case Timeframe._1Y:
         return ["Jan", "", "Mar", "", "May", "", "Jul", "", "Sep", "", "Nov", ""];
@@ -53,12 +39,30 @@ export const LineGraph = (props: ILineGraph) => {
     }
   }
 
+  const getData = (): number[] => {
+    
+    switch(timeframe) {
+      case Timeframe._1Y:
+        return [];
+      case Timeframe._6M:
+        return [];
+      case Timeframe._3M:
+          return [];
+      default:
+        return []
+    }
+  }
+
   return (
     <View style={styles.container}>
         <LineChart
                 data={{
-                labels: getTimeFrame(),
-                datasets: [ { data } ]
+                  labels: getLabels(),
+                  datasets: [
+                    {
+                      data: getData()
+                    }
+                  ]
                 }}
                 width={Dimensions.get("window").width - 40} // from react-native
                 height={200}

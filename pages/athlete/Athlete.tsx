@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, TouchableOpacity, StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, FontSize, getNews, globalStyles, IAthlete, IUser, TokenType, Sport} from '../../global';
+import { Color, FontSize, getCurrencyVal, getNews, globalStyles, IAthlete, IUser, TokenType, Sport} from '../../global';
 import { NewsCard } from '../../global/components/NewsCard';
 import { Token } from '../../global/components/Token';
 import { fetchUser, saveTokens, saveWatchlist } from '../../serverGateway';
@@ -14,7 +14,7 @@ export interface IAthleteProps {
 }
 
 export const Athlete = (props: IAthleteProps) => {
-    const athlete = props.athlete;
+    const { athlete, setAthlete, user, setUser } = props;
     const [tokensAmount, setTokensAmount] = useState<number>(props.athlete.quantity);
     const [articles, setArticles] = useState<any[]>([]);
 
@@ -133,7 +133,7 @@ export const Athlete = (props: IAthleteProps) => {
             })
         }
 
-        return (<FlatList numColumns={props.athlete.quantity} data={tokenData} renderItem={renderItem}></FlatList>)
+        return (<FlatList numColumns={5} data={tokenData} renderItem={renderItem}></FlatList>)
     }
 
     const getUserTokenInfo = () => {
@@ -144,18 +144,18 @@ export const Athlete = (props: IAthleteProps) => {
                 </Text>
                 {getTokenVisualization()}
                 <Text style={styles.tokenInfo}>
-                    You have <Text>{tokensAmount}</Text> tokens which is equivalent to <Text>${tokensAmount * props.athlete.tokenValue}</Text>
+                    You have <Text>{tokensAmount}</Text> tokens which is equivalent to <Text>{getCurrencyVal(tokensAmount * athlete.tokenValue)}</Text>
                 </Text>
                 <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                    <TouchableOpacity style={globalStyles.buttonV3}>
+                    <TouchableOpacity style={globalStyles.buttonV1}>
                        {/* <Text style={globalStyles.buttonTextV1}>Buy</Text> */}
-                      <Text style={styles.buy} onPress={() => buyToken(athlete.name)}>
+                      <Text style={globalStyles.buttonTextV1} onPress={() => buyToken(athlete.name)}>
                         Buy
                       </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={globalStyles.buttonV3}>
+                    <TouchableOpacity style={globalStyles.buttonV2}>
                         {/* <Text style={globalStyles.buttonTextV2}>Sell</Text> */}
-                        <Text style={styles.sell} onPress={() => sellToken(athlete.name)}>
+                        <Text style={globalStyles.buttonTextV2} onPress={() => sellToken(athlete.name)}>
                         Sell
                       </Text>
                     </TouchableOpacity>
@@ -177,7 +177,7 @@ export const Athlete = (props: IAthleteProps) => {
       }
 
       useEffect(() => {
-        getNews(true, athlete.name+"%20", undefined, undefined)
+        getNews(true, athlete.name, undefined, undefined)
           .then((res: any) => {
             console.log(res.articles)
             setArticles(res.articles)
@@ -200,7 +200,7 @@ export const Athlete = (props: IAthleteProps) => {
           style={styles.profileImage}
         ></Image>
         <Text style={styles.token}>
-            1TOK = ${athlete.tokenValue}
+            1TOK = {athlete.tokenValue && getCurrencyVal(athlete.tokenValue)}
         </Text>
       </View>
         <View style={{width: '100vw', paddingHorizontal: 20}}>
@@ -211,11 +211,11 @@ export const Athlete = (props: IAthleteProps) => {
                 {athlete.sport}
             </Text>
             {getUserTokenInfo()}
-            <Text style={styles.buy}>
-              You can also add this token to your watchlist
+            <Text style={globalStyles.sectionHeader}>
+              Watchlist
             </Text>
-            <TouchableOpacity style={globalStyles.buttonV3}>
-              <Text style={styles.buy} onPress={() => addToWatchlist(athlete.name)}>
+            <TouchableOpacity style={globalStyles.buttonV1}>
+              <Text style={globalStyles.buttonTextV1} onPress={() => addToWatchlist(athlete.name)}>
                 Add to Watchlist
               </Text>
             </TouchableOpacity>
