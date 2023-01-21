@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   profileImage: {
-    width: 100,
+    width: '100%',
     height: 100
   },
   athleteBioContainer: {

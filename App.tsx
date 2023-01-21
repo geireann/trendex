@@ -95,7 +95,7 @@ export default function App() {
   // Set an initializing state whilst Firebase connects
   // const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<IUser>({
-    username: "username",
+    username: "username123",
     password: "password",
     email: "test@trendex.com",
     balance: 100,

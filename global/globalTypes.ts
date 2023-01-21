@@ -1,6 +1,7 @@
 /**
  * Interface representing a user
  */
+import { IDataPoint } from "./components";
 import { Sport } from "./globalEnums"
 
 /**
@@ -70,7 +71,18 @@ export interface IAthlete {
     profileImageUrl: string,
     name: string,
     tokenValue: number,
-    quantity: number
+    quantity: number,
+    historicalTokenData: IDataPoint[]
+}
+
+const createDummyHistoricalData = (currentVal: number): IDataPoint[] => {
+    let data: IDataPoint[] = [];
+    const currentDataPoint:IDataPoint = {
+        date: new Date(),
+        numVal: currentVal
+    }
+    
+    return data;
 }
 
 export class AthleteType implements IAthlete {
@@ -80,6 +92,7 @@ export class AthleteType implements IAthlete {
     name: string;
     tokenValue: number;
     quantity: number;
+    historicalTokenData: IDataPoint[];
 
     constructor(id: string, sport: Sport, profileImageUrl: string, name: string,
         tokenValue: number, quantity: number) {
@@ -89,5 +102,6 @@ export class AthleteType implements IAthlete {
             this.name = name
             this.tokenValue = tokenValue
             this.quantity = quantity
+            this.historicalTokenData = createDummyHistoricalData(tokenValue)
     }
 }

@@ -177,7 +177,7 @@ export const Athlete = (props: IAthleteProps) => {
       }
 
       useEffect(() => {
-        getNews(true, athlete.name+"%20", undefined, undefined)
+        getNews(true, athlete.name, undefined, undefined)
           .then((res: any) => {
             console.log(res.articles)
             setArticles(res.articles)

@@ -19,13 +19,14 @@ export const Investments = (props: InvestmentsProps) => {
     // debugger
     const token = tokenInfo.item;
     console.log("Called getTokens" + token.name);
-    const athlete = {
+    const athlete: IAthlete = {
       id: token.id,
       name: token.name,
       sport: token.sport,
       profileImageUrl: token.profileUrl,
       tokenValue: token.price,
-      quantity: token.quantity
+      quantity: token.quantity,
+      historicalTokenData: []
     }
     return (
       <AthleteTokenCard setAthlete={props.setAthlete} numberTokens={token.quantity} athlete={athlete} />

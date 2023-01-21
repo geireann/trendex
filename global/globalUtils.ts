@@ -29,6 +29,7 @@ export const getCurrencyVal = (val: number): string => {
 }
 
 export const getFlagEmoji = (countryCode: string) => {
+    if (countryCode === "All") return "All"
     const codePoints = countryCode
       .toUpperCase()
       .split('')
