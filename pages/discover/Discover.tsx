@@ -53,7 +53,7 @@ let searchResults: AthleteType[] = athletes;
     })
 
     if (searchResults.length === 0) {
-      return <Text style={styles.noResults}>
+      return <Text style={globalStyles.message}>
         No results match your search query.
       </Text>
     }
@@ -135,7 +135,9 @@ let searchResults: AthleteType[] = athletes;
         keyExtractor={item => item.id + 'trending'}
         style={{
           width: '100vw',
-          left: -20
+          paddingLeft: 20,
+          paddingRight: 10,
+          left: '-20px'
         }}
       />
     )
@@ -171,7 +173,7 @@ let searchResults: AthleteType[] = athletes;
       <ScrollView horizontal={true} style={globalStyles.horizontalScroll}>
         {getNewsCountryFilters()}
       </ScrollView>
-      {articlesLoaded ? getLatestNews() : <Text>Articles not loaded</Text>}
+      {articlesLoaded ? getLatestNews() : <Text style={globalStyles.message}>Articles loading</Text>}
     </ScrollView>
   );
 }
@@ -186,9 +188,5 @@ const styles = StyleSheet.create({
   },
   trendingContainer: {
     flexDirection: 'column',
-  },
-  noResults: {
-    fontSize: FontSize.BODY_LARGE,
-    color: Color.TEXT_ON_DARK_VARIANT
   }
 });

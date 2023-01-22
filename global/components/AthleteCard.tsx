@@ -64,10 +64,11 @@ const styles = StyleSheet.create({
     borderColor: Color.VARIANT_2,
     borderWidth: 2,
     borderStyle: 'solid',
-    width: '50%',
+    width: 'calc(50% - 10px)',
     overflow: 'hidden',
     borderRadius: 10,
-    marginHorizontal: 10,
+    marginRight: 10,
+    // marginHorizontal: 10,
     marginVertical: 10
   },
   containerFullWidth: {
