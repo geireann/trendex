@@ -99,5 +99,9 @@ export const globalStyles = StyleSheet.create({
         minHeight: 30,
         marginBottom: 10,
         paddingBottom: 5
+      },
+      message: {
+        fontSize: FontSize.BODY_LARGE,
+        color: Color.TEXT_ON_DARK_VARIANT
       }
   });

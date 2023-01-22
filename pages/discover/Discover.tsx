@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, Switch, ScrollView, TouchableOpacity, FlatList, ListRenderItemInfo } from 'react-native';
 import { athletes } from '../../data';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, AthleteType } from '../../global';
+import { Color, IAthlete, NewsCategory, NewsCountry, SearchInput, Sport, AthleteType, FontSize } from '../../global';
 import { AthleteCard } from '../../global/components/AthleteCard';
 import { NewsCard } from '../../global/components/NewsCard';
 import { globalStyles } from '../../global/globalStyles';
@@ -51,6 +51,13 @@ let searchResults: AthleteType[] = athletes;
       searchResults = searchResults.filter((res) => {
         return res.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1; 
     })
+
+    if (searchResults.length === 0) {
+      return <Text style={globalStyles.message}>
+        No results match your search query.
+      </Text>
+    }
+
     return <FlatList
         data={searchResults}
         renderItem={(item) => renderItem(item, true)}
@@ -128,7 +135,9 @@ let searchResults: AthleteType[] = athletes;
         keyExtractor={item => item.id + 'trending'}
         style={{
           width: '100vw',
-          left: -20
+          paddingLeft: 20,
+          paddingRight: 10,
+          left: '-20px'
         }}
       />
     )
@@ -164,7 +173,7 @@ let searchResults: AthleteType[] = athletes;
       <ScrollView horizontal={true} style={globalStyles.horizontalScroll}>
         {getNewsCountryFilters()}
       </ScrollView>
-      {articlesLoaded ? getLatestNews() : <Text>Articles not loaded</Text>}
+      {articlesLoaded ? getLatestNews() : <Text style={globalStyles.message}>Articles loading</Text>}
     </ScrollView>
   );
 }
