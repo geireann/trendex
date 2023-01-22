@@ -13,12 +13,6 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { Header } from './global/components/Header';
 import { Athlete } from './pages/athlete';
 
-export const crypto = require('crypto');
-const algorithm = 'aes-256-cbc'; //Using AES encryption
-//make these not hardcoded later lol
-export const key = "85e6fa2c3c04586c3bb7a4132b42a42e"
-export const iv = "ca39fbde137357be"
-
 export enum Page {
   LOGIN = 'Login',
   PROFILE = 'Profile',
@@ -107,13 +101,13 @@ export default function App() {
   const [athlete, setAthlete] = useState<IAthlete | undefined>();
   const [balance, setBalance] = useState<number>(0);
 
-  const setUserProfile = (user: IUser) => { 
-    setUser(user)
-    console.log(user.username)
-  }
+  // const setUserProfile = (user: IUser) => { 
+  //   setUser(user)
+  //   console.log(user.username)
+  // }
 
   if (user.username == "") {
-    return <Login setUser={setUserProfile}/>
+    return <Login setUser={setUser}/>
   } 
   
   
