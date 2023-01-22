@@ -101,27 +101,59 @@ export const Athlete = (props: IAthleteProps) => {
       }
     }
 
-    const addToWatchlist = async(tokenName : string) => {
-      debugger
-      const newWatchList = [...props.user.watchlist]
+
+    const tokenInWatchlist = (tokenName: string, watchlist: TokenType[]) : boolean => {
       let tokenFound = false
-      //make sure token doesn't already exist in watchlist
-      for (let i = 0; i < newWatchList.length; i++) {
-        if (newWatchList[i].name == tokenName) {
-          tokenFound = true;
+      for (let i = 0; i < watchlist.length; i++) {
+        if (watchlist[i].name == tokenName) {
+          tokenFound = true
         }
       }
-      if (!tokenFound) {
-        let newUser = {...props.user}
-        let newToken = new TokenType(props.athlete.id,
-          props.athlete.name, 1, props.athlete.tokenValue,
-          props.athlete.profileImageUrl, props.athlete.sport)
-        newWatchList.push(newToken)
-        newUser.watchlist = newWatchList
-        props.setUser(newUser)
-        await saveWatchlist(props.user.username, newWatchList)
-      }
+      return tokenFound
+    }
 
+    const addOrRemoveFromWatchlistButton = () : any => {
+      const newWatchList = [...props.user.watchlist]
+      if (!tokenInWatchlist(athlete.name, newWatchList)) {
+        return  (
+        <Text style={globalStyles.buttonTextV1} onPress={() => addToWatchlist()}>
+          Add to Watchlist
+        </Text>
+        )
+      } else {
+        return (
+          <Text style={globalStyles.buttonTextV1} onPress={() => removeFromWatchlist()}>
+            Remove from Watchlist
+          </Text>
+        )
+      }
+    }
+
+    const addToWatchlist = async() => {
+      const newWatchList = [...props.user.watchlist]
+      let newUser = {...props.user}
+      let newToken = new TokenType(props.athlete.id,
+      props.athlete.name, 1, props.athlete.tokenValue,
+      props.athlete.profileImageUrl, props.athlete.sport)
+      newWatchList.push(newToken)
+      newUser.watchlist = newWatchList
+      props.setUser(newUser)
+      await saveWatchlist(props.user.username, newWatchList)
+    }
+
+    const removeFromWatchlist = async() => {
+      const newWatchList = [...props.user.watchlist]
+      let newUser = {...props.user}
+      let currToken = new TokenType("", "", 0, 0, "", Sport.ALL);
+      for (let i = 0; i < newWatchList.length; i++) {
+        if (athlete.name == newWatchList[i].name) {
+          currToken =  newWatchList[i]
+        }
+      }
+      newWatchList.splice(newWatchList.indexOf(currToken), 1)
+      newUser.watchlist = newWatchList
+      props.setUser(newUser)
+      await saveWatchlist(props.user.username, newWatchList)
     }
 
     const getTokenVisualization = () => {
@@ -215,9 +247,7 @@ export const Athlete = (props: IAthleteProps) => {
               Watchlist
             </Text>
             <TouchableOpacity style={globalStyles.buttonV1}>
-              <Text style={globalStyles.buttonTextV1} onPress={() => addToWatchlist(athlete.name)}>
-                Add to Watchlist
-              </Text>
+              {addOrRemoveFromWatchlistButton()}
             </TouchableOpacity>
             <Text style={globalStyles.sectionHeader}>
                 Related News
