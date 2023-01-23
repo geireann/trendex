@@ -13,10 +13,10 @@ We mainly made use of react native and typescript for our application, and other
 # Running Our Project
 
 
-## Trendex-server
+# Trendex-server
 Our trendex server makes use of express to create several endpoints that our frontend trendex app interacts with. The different routes primarily interact with our mongoDB cluster. They allows us to create users, fetch users with particular usernames and passwords, and update different fields for users including the tokens that they own and the quantities in which they own them, which tokens they have in their watchlist, and their remaining balance.
 
-## Trendex 
+# Trendex 
 ### Login/Authentication
 Our app requires users to be signed in to a valid account to use the app. Users can toggle between a sign up screen and a log in screen. We made use of the crypto-js library to encrypt user passwords when storing them and checking for valid passwords - this prevents storing the raw passwords in our database, which would pose a liability for our users in case our database ever got hacked. We start new accounts with a balance of 100 “dollars” to give them some purchasing power.
 
