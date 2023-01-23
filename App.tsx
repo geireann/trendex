@@ -13,12 +13,6 @@ import { getHeaderTitle } from '@react-navigation/elements';
 import { Header } from './global/components/Header';
 import { Athlete } from './pages/athlete';
 
-export const crypto = require('crypto');
-const algorithm = 'aes-256-cbc'; //Using AES encryption
-//make these not hardcoded later lol
-export const key = "85e6fa2c3c04586c3bb7a4132b42a42e"
-export const iv = "ca39fbde137357be"
-
 export enum Page {
   LOGIN = 'Login',
   PROFILE = 'Profile',
@@ -95,13 +89,11 @@ export default function App() {
   // Set an initializing state whilst Firebase connects
   // const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<IUser>({
-    username: "username123",
-    password: "password",
-    email: "test@trendex.com",
+    username: "",
+    password: "",
+    email: "",
     balance: 100,
-    tokens: [new TokenType("4", "Lebron James", 1, 10, "https://hoopshabit.com/wp-content/uploads/getty-images/2017/07/1448620152.jpeg", Sport.BASKETBALL), 
-    new TokenType("5", "Robert Lewandowski", 2, 18, "https://pbs.twimg.com/profile_images/1560186554781519873/wq6vdCir_400x400.jpg", Sport.FOOTBALL),
-    new TokenType("6", "Kylian Mbappe", 3, 60, "https://media.cnn.com/api/v1/images/stellar/prod/221229101146-mbappe-goal-psg.jpg?c=original", Sport.FOOTBALL)],
+    tokens: [],
     watchlist: []
   });
 
@@ -109,13 +101,13 @@ export default function App() {
   const [athlete, setAthlete] = useState<IAthlete | undefined>();
   const [balance, setBalance] = useState<number>(0);
 
-  const setUserProfile = (user: IUser) => { 
-    setUser(user)
-    console.log(user.username)
-  }
+  // const setUserProfile = (user: IUser) => { 
+  //   setUser(user)
+  //   console.log(user.username)
+  // }
 
-  if (user.username == "username") {
-    return <Login setUser={setUserProfile}/>
+  if (user.username == "") {
+    return <Login setUser={setUser}/>
   } 
   
   

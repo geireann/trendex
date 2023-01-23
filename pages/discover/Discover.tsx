@@ -24,7 +24,7 @@ export const Discover = ({setAthlete}: {
     const filters:JSX.Element[] = [];
 
     Object.values(Sport).forEach((value, ind) => {
-      filters.push(<TouchableOpacity style={categoryFilter === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setCategoryFitler(value as Sport)}>
+      filters.push(<TouchableOpacity key={ind} style={categoryFilter === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setCategoryFitler(value as Sport)}>
         <Text style={categoryFilter === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{value}</Text>
       </TouchableOpacity>)
     })
@@ -36,7 +36,7 @@ export const Discover = ({setAthlete}: {
     const filters:JSX.Element[] = [];
 
     Object.values(NewsCountry).forEach((value, ind) => {
-      filters.push(<TouchableOpacity style={newsCountry === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setNewsCountry(value as NewsCountry)}>
+      filters.push(<TouchableOpacity key={ind} style={newsCountry === value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setNewsCountry(value as NewsCountry)}>
         <Text style={newsCountry === value ? globalStyles.buttonTextActive : globalStyles.buttonText}>{getFlagEmoji(value)}</Text>
       </TouchableOpacity>)
     })

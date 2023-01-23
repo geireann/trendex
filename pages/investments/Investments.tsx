@@ -78,7 +78,7 @@ export const Investments = (props: InvestmentsProps) => {
     Object.values(Timeframe).forEach((value, ind) => {
       console.log(value)
       buttons.push(
-        <TouchableOpacity style={timeframe == value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setTimeframe(value as Timeframe)}>
+        <TouchableOpacity key={ind} style={timeframe == value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setTimeframe(value as Timeframe)}>
           <Text style={timeframe == value ? globalStyles.buttonTextActive : globalStyles.buttonText} >{value}</Text>
         </TouchableOpacity>
       )
