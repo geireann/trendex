@@ -4,6 +4,8 @@
 
 ## Faculty Sponsor: Jeff Huang
 
+## Team: Geireann Lindfield-Roberts, Chotoo Amin, Damian Wasilewicz
+
 # Overview
 Our Capstone is a cumulation of the skills we’ve learned throughout our Computer Science degrees, and involves a good deal of our own research into skills outside of class as well.
 Our original assignment involved finding an early stage startup and iteratively developing a High Fidelity prototype for the problem that the startup was tackling. Our capstone project involved converting this prototype to a functional mobile application. The application allows users to purchase (with fake currency) and manage tokens that represent athletes (at the moment, Basketball and Soccer athletes) with values that vary depending on the real-life athletes’ performance in their respective fields.
