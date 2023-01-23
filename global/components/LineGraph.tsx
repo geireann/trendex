@@ -1,6 +1,7 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
 import { LineChart } from 'react-native-chart-kit';
 import { Color, Timeframe } from '../globalEnums';
+import { createDummyHistoricalData } from '../globalUtils';
 
 export interface IDataPoint {
   numVal?: number,
@@ -15,13 +16,7 @@ export interface ILineGraph {
 export const LineGraph = (props: ILineGraph) => {
 
   const dummyData = (): IDataPoint[] => {
-    switch(timeframe) {
-      case Timeframe._1Y:
-      case Timeframe._6M:
-      case Timeframe._3M:
-      default:
-        return [];
-    }
+    return createDummyHistoricalData(10);
   }
 
   const {timeframe, data = dummyData()} = props;
@@ -29,47 +24,58 @@ export const LineGraph = (props: ILineGraph) => {
   const getLabels = (): string[] => {
     switch(timeframe) {
       case Timeframe._1Y:
-        return ["Jan", "", "Mar", "", "May", "", "Jul", "", "Sep", "", "Nov", ""];
+        return ["", "", "", "", "", "", "", "", "", "", "", ""];
       case Timeframe._6M:
-        return ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return ["", "", "", "", "", ""];
       case Timeframe._3M:
           return ["Oct", "Nov", "Dec"];
+      case Timeframe._1M:
+          return [""];
+      case Timeframe._1W:
+          return [""];
       default:
-        return []
+        return [];
     }
   }
 
   const getData = (): number[] => {
-    
+    const numData: number[] = [];
+    data.forEach((val) => {
+      val.numVal && numData.push(val.numVal)
+    })
     switch(timeframe) {
       case Timeframe._1Y:
-        return [];
+        return numData.slice(0, numData.length).reverse();
       case Timeframe._6M:
-        return [];
+        return numData.slice(0, numData.length / 2).reverse();
       case Timeframe._3M:
-          return [];
+        return numData.slice(0, numData.length / 4).reverse();
+      case Timeframe._1M:
+        return numData.slice(0, numData.length / 12).reverse();
+      case Timeframe._1W:
+        return numData.slice(0, numData.length / 56).reverse();
       default:
-        return []
+        return numData.slice(0, numData.length).reverse();
     }
   }
 
   return (
     <View style={styles.container}>
         <LineChart
-                data={{
-                  labels: getLabels(),
-                  datasets: [
-                    {
-                      data: getData()
-                    }
-                  ]
-                }}
-                width={Dimensions.get("window").width - 40} // from react-native
-                height={200}
-                yAxisLabel="$"
-                yAxisSuffix="k"
-                yAxisInterval={1} // optional, defaults to 1
-                chartConfig={{
+            data={{
+              labels: [],
+              datasets: [
+                {
+                  data: getData()
+                }
+              ]
+            }}
+            width={Dimensions.get("window").width - 40} // from react-native
+            height={200}
+            yAxisLabel="$"
+            yAxisSuffix=""
+            yAxisInterval={1} // optional, defaults to 1
+            chartConfig={{
                 backgroundColor: Color.GRAY_2,
                 backgroundGradientFrom: Color.GRAY_2,
                 backgroundGradientTo: Color.GRAY_2,
@@ -80,12 +86,15 @@ export const LineGraph = (props: ILineGraph) => {
                     borderRadius: 16,
                 },
                 propsForDots: {
-                    r: "3",
-                    strokeWidth: "2",
+                    r: "0",
+                    strokeWidth: "0",
                     stroke: Color.VARIANT_2
                 },
                 propsForLabels: {
                     fontFamily: 'monospace'
+                },
+                propsForBackgroundLines: {
+                  strokeWidth: "0"
                 }
             }}
             bezier

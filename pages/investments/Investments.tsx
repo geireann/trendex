@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Dimensions, TouchableOpacity, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Color, FontSize, getCurrencyVal, LineGraph, Timeframe, TokenType, IUser, IAthlete } from '../../global';
+import { Color, FontSize, getCurrencyVal, LineGraph, Timeframe, TokenType, IUser, IAthlete, createDummyHistoricalData } from '../../global';
 import { AthleteTokenCard } from '../../global/components/AthleteTokenCard';
 import { globalStyles } from '../../global/globalStyles';
 import { fetchUser, saveTokens } from '../../serverGateway'
@@ -26,7 +26,7 @@ export const Investments = (props: InvestmentsProps) => {
       profileImageUrl: token.profileUrl,
       tokenValue: token.price,
       quantity: token.quantity,
-      historicalTokenData: []
+      historicalTokenData: createDummyHistoricalData(token.price)
     }
     return (
       <AthleteTokenCard setAthlete={props.setAthlete} numberTokens={token.quantity} athlete={athlete} />

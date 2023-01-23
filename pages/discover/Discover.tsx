@@ -74,20 +74,10 @@ let searchResults: AthleteType[] = athletes;
   );
 
   const renderNewsItem = (item:any, fullWidth: boolean) => {
-    console.log(item)
     return <NewsCard {...item}/>
   };
 
   const getLatestNews = (): JSX.Element => {
-    const latestNewsItems: JSX.Element[] = [];
-    
-    articles.forEach((article, index) => {
-      // console.log(article)
-      latestNewsItems.push(
-        <NewsCard {...article}/>
-      )
-    })
-
     return (
       <FlatList
         data={articles}
@@ -99,25 +89,23 @@ let searchResults: AthleteType[] = athletes;
         }}
       />
     )
-
-    // return latestNewsItems;
   }
 
   useEffect(() => {
-    let countryFilter: NewsCountry | undefined = newsCountry;
-    if (newsCountry === NewsCountry.All) countryFilter = undefined
-    getNews(false, undefined, NewsCategory.SPORT, countryFilter)
-      .then((res: any) => {
-        console.log(res.articles)
-        setArticles(res.articles)
-        setArticlesLoaded(true)
-      })
-      .catch((e) => {
-        console.log(e.message)
-      })
+    // let countryFilter: NewsCountry | undefined = newsCountry;
+    // if (newsCountry === NewsCountry.All) countryFilter = undefined
+    // getNews(false, undefined, NewsCategory.SPORT, countryFilter)
+    //   .then((res: any) => {
+    //     console.log(res.articles)
+    //     setArticles(res.articles)
+    //     setArticlesLoaded(true)
+    //   })
+    //   .catch((e) => {
+    //     console.log(e.message)
+    //   })
     
-    // setArticles(dummyArticles)
-    // setArticlesLoaded(true)
+    setArticles(dummyArticles)
+    setArticlesLoaded(true)
   },[newsCountry])
 
   const getTrendingAthletes = () => {
@@ -173,7 +161,7 @@ let searchResults: AthleteType[] = athletes;
       <ScrollView horizontal={true} style={globalStyles.horizontalScroll}>
         {getNewsCountryFilters()}
       </ScrollView>
-      {articlesLoaded ? getLatestNews() : <Text style={globalStyles.message}>Articles loading</Text>}
+      {articlesLoaded ? getLatestNews() : <Text style={globalStyles.message}>Articles loading...</Text>}
     </ScrollView>
   );
 }

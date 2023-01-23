@@ -222,7 +222,7 @@ export const Athlete = (props: IAthleteProps) => {
             <Text style={globalStyles.sectionHeader}>
                 Related News
             </Text>
-            {articlesLoaded ? getRelatedNews() : <Text style={globalStyles.message}>Articles loading</Text>}
+            {articlesLoaded ? getRelatedNews() : <Text style={globalStyles.message}>Articles loading...</Text>}
         </View>
     </ScrollView>
   );

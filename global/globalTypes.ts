@@ -3,6 +3,7 @@
  */
 import { IDataPoint } from "./components";
 import { Sport } from "./globalEnums"
+import { createDummyHistoricalData } from "./globalUtils";
 
 /**
  * Class representing a token belonging to a user, storing information about
@@ -73,16 +74,6 @@ export interface IAthlete {
     tokenValue: number,
     quantity: number,
     historicalTokenData: IDataPoint[]
-}
-
-const createDummyHistoricalData = (currentVal: number): IDataPoint[] => {
-    let data: IDataPoint[] = [];
-    const currentDataPoint:IDataPoint = {
-        date: new Date(),
-        numVal: currentVal
-    }
-    
-    return data;
 }
 
 export class AthleteType implements IAthlete {
