@@ -33,6 +33,23 @@ export const Investments = (props: InvestmentsProps) => {
       )
   }
 
+  const renderWatchlistToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
+    // debugger
+    const token = tokenInfo.item;
+    const athlete: IAthlete = {
+      id: token.id,
+      name: token.name,
+      sport: token.sport,
+      profileImageUrl: token.profileUrl,
+      tokenValue: token.price,
+      quantity: 0,
+      historicalTokenData: createDummyHistoricalData(token.price)
+    }
+    return (
+      <AthleteTokenCard setAthlete={props.setAthlete} numberTokens={0} athlete={athlete} />
+      )
+  }
+
   useEffect(() => {
     const fetchTokens = async () => {
       let response = await fetchUser(props.currentUser.username, props.currentUser.password)
@@ -61,12 +78,28 @@ export const Investments = (props: InvestmentsProps) => {
 
 
   const getWatchListTokens = ():any => {
+    if (props.currentUser.watchlist && props.currentUser.watchlist.length === 0) {
+      return (<TouchableOpacity style={globalStyles.buttonV1}>
+        {/* <Text style={globalStyles.buttonTextV2}>Sell</Text> */}
+        <Text style={globalStyles.buttonTextV1}>
+          Discover More...
+        </Text>
+    </TouchableOpacity>)
+    }
     return (
-      <FlatList data = {props.currentUser.watchlist} renderItem={renderToken} keyExtractor={item => item.id}/>
+      <FlatList data = {props.currentUser.watchlist} renderItem={renderWatchlistToken} keyExtractor={item => item.id}/>
       );
   }
 
   const getTokens = ():any => {
+    if (props.currentUser.tokens.length === 0) {
+      return (<TouchableOpacity style={globalStyles.buttonV1}>
+        {/* <Text style={globalStyles.buttonTextV2}>Sell</Text> */}
+        <Text style={globalStyles.buttonTextV1}>
+          Discover More...
+        </Text>
+    </TouchableOpacity>)
+    }
     return (
       <FlatList data = {props.currentUser.tokens} renderItem={renderToken} keyExtractor={item => item.id}/>
       );
@@ -76,7 +109,6 @@ export const Investments = (props: InvestmentsProps) => {
     const buttons:JSX.Element[] = [];
 
     Object.values(Timeframe).forEach((value, ind) => {
-      console.log(value)
       buttons.push(
         <TouchableOpacity key={ind} style={timeframe == value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setTimeframe(value as Timeframe)}>
           <Text style={timeframe == value ? globalStyles.buttonTextActive : globalStyles.buttonText} >{value}</Text>
@@ -89,9 +121,10 @@ export const Investments = (props: InvestmentsProps) => {
 
   return (
     <ScrollView style={styles.container}>
+      <Text style={styles.totalTitle}>Total Invested</Text>
       <Text style={styles.total}>{getCurrencyVal(calcTotal(props.currentUser.tokens))}</Text>
-      <LineGraph timeframe={timeframe}/>
-      <View style={styles.dateBar}>
+      <LineGraph timeframe={timeframe} currentVal={calcTotal(props.currentUser.tokens)}/>
+      <View style={globalStyles.dateBar}>
         {getTimelineRangeButtons()}
       </View>
       <View style={styles.tokenContainer}>
@@ -114,19 +147,21 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingBottom: 50
   },
+  totalTitle: {
+    color: Color.TEXT_ON_DARK_VARIANT,
+    textAlign: 'left',
+    alignSelf: 'flex-end',
+    fontSize: FontSize.BODY,
+    fontWeight: "400",
+  },
   total: {
     color: Color.VARIANT_2,
     textAlign: 'left',
     alignSelf: 'flex-end',
     fontSize: FontSize.LARGE,
     fontWeight: "600",
-    fontFamily: 'monospace'
-  },
-  dateBar: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginLeft: 10,
-    marginTop: 40
+    fontFamily: 'monospace',
+    marginBottom: 10
   },
   tokenContainer: {
     flexDirection: 'column',

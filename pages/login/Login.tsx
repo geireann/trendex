@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, View, Button, Image, Switch, Alert } from 'react-native';
+import { StyleSheet, View, Button, Image, Switch, Alert, TouchableOpacity, Text } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
-import { Color, FontSize, LoginInput, IUser, TokenType, Sport} from '../../global';
+import { Color, FontSize, LoginInput, IUser, TokenType, Sport, globalStyles} from '../../global';
 import { createUser, fetchUser, fetchUsers} from '../../serverGateway';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { Turbulence } from '@shopify/react-native-skia';
@@ -131,7 +131,7 @@ export const Login = (props: ILoginProps) => {
                 username: username.trim().toLowerCase(),
                 password: encrypt(password).encryptedData,
                 email: email,
-                balance: 100,
+                balance: 300,
                 tokens: [],
                 watchlist: []
               })
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
         backgroundColor: Color.GRAY_2,
         alignItems: 'center',
       justifyContent: 'center',
+      // marginTop: 30
     },
     formContainer: {
       alignItems: 'center',

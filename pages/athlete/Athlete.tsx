@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, TouchableOpacity, StyleSheet, Text, View, Image, ScrollView, FlatList } from 'react-native';
 import { dummyArticles } from '../../data/dummyNewsArticles';
-import { Color, FontSize, getCurrencyVal, getNews, globalStyles, IAthlete, IUser, TokenType, Sport} from '../../global';
+import { Color, FontSize, getCurrencyVal, getNews, globalStyles, IAthlete, IUser, TokenType, Sport, LineGraph, Timeframe} from '../../global';
 import { NewsCard } from '../../global/components/NewsCard';
 import { Token } from '../../global/components/Token';
 import { fetchUser, saveTokens, saveWatchlist } from '../../serverGateway';
@@ -15,6 +15,7 @@ export interface IAthleteProps {
 
 export const Athlete = (props: IAthleteProps) => {
     const { athlete, setAthlete, user, setUser } = props;
+    const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe._1Y)
     const [tokensAmount, setTokensAmount] = useState<number>(props.athlete.quantity);
     const [articles, setArticles] = useState<any[]>([]);
 
@@ -113,7 +114,10 @@ export const Athlete = (props: IAthleteProps) => {
     }
 
     const addOrRemoveFromWatchlistButton = () : any => {
-      const newWatchList = [...props.user.watchlist]
+      let newWatchList: TokenType[] = []
+      if (props.user.watchlist) {
+        newWatchList = [...props.user.watchlist]
+      }
       if (!tokenInWatchlist(athlete.name, newWatchList)) {
         return  (
         <Text style={globalStyles.buttonTextV1} onPress={() => addToWatchlist()}>
@@ -154,6 +158,20 @@ export const Athlete = (props: IAthleteProps) => {
       newUser.watchlist = newWatchList
       props.setUser(newUser)
       await saveWatchlist(props.user.username, newWatchList)
+    }
+
+    const getTimelineRangeButtons = (): JSX.Element[] => {
+      const buttons:JSX.Element[] = [];
+  
+      Object.values(Timeframe).forEach((value, ind) => {
+        buttons.push(
+          <TouchableOpacity key={ind} style={timeframe == value ? globalStyles.buttonActive : globalStyles.button} onPress={() => setTimeframe(value as Timeframe)}>
+            <Text style={timeframe == value ? globalStyles.buttonTextActive : globalStyles.buttonText} >{value}</Text>
+          </TouchableOpacity>
+        )
+      })
+  
+      return buttons;
     }
 
     const getTokenVisualization = () => {
@@ -250,6 +268,13 @@ export const Athlete = (props: IAthleteProps) => {
               {addOrRemoveFromWatchlistButton()}
             </TouchableOpacity>
             <Text style={globalStyles.sectionHeader}>
+              Historical Token Value
+            </Text>
+            <LineGraph timeframe={timeframe} data={athlete.historicalTokenData}/>
+            <View style={globalStyles.dateBar}>
+              {getTimelineRangeButtons()}
+            </View>
+            <Text style={globalStyles.sectionHeader}>
                 Related News
             </Text>
             {articlesLoaded ? getRelatedNews() : <Text style={globalStyles.message}>Articles loading...</Text>}
@@ -277,7 +302,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     flex: 1,
     color: Color.TEXT_ON_DARK,
-    fontWeight: '600'
+    fontWeight: '600',
+    marginBottom: '-100px'
   },
   buy: {
     backgroundColor: Color.VARIANT_2,

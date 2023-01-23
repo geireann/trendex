@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 15,
     marginBottom: 20,
   },
   input: {

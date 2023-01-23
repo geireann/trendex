@@ -10,13 +10,14 @@ export interface IDataPoint {
 
 export interface ILineGraph {
   timeframe?: Timeframe,
-  data?: IDataPoint[]
+  data?: IDataPoint[],
+  currentVal?: number,
 }
 
 export const LineGraph = (props: ILineGraph) => {
 
   const dummyData = (): IDataPoint[] => {
-    return createDummyHistoricalData(10);
+    return createDummyHistoricalData(props.currentVal ? props.currentVal : 0);
   }
 
   const {timeframe, data = dummyData()} = props;
@@ -53,7 +54,7 @@ export const LineGraph = (props: ILineGraph) => {
       case Timeframe._1M:
         return numData.slice(0, numData.length / 12).reverse();
       case Timeframe._1W:
-        return numData.slice(0, numData.length / 56).reverse();
+        return numData.slice(0, numData.length / 56 + 1).reverse();
       default:
         return numData.slice(0, numData.length).reverse();
     }
@@ -74,6 +75,7 @@ export const LineGraph = (props: ILineGraph) => {
             height={200}
             yAxisLabel="$"
             yAxisSuffix=""
+            fromZero={true}
             yAxisInterval={1} // optional, defaults to 1
             chartConfig={{
                 backgroundColor: Color.GRAY_2,
@@ -112,5 +114,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20
   },
 });

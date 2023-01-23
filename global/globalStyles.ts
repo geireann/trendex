@@ -6,7 +6,7 @@ export const globalStyles = StyleSheet.create({
       fontSize: FontSize.SECTION,
       color: Color.TEXT_ON_DARK,
       fontWeight: "600",
-      marginTop: 15,
+      marginTop: 20,
       marginBottom: 10,
       alignSelf: 'flex-start',
     },
@@ -103,5 +103,11 @@ export const globalStyles = StyleSheet.create({
       message: {
         fontSize: FontSize.BODY_LARGE,
         color: Color.TEXT_ON_DARK_VARIANT
-      }
+      },
+      dateBar: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginLeft: 10,
+        marginTop: 10
+      },
   });

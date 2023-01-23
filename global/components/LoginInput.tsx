@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '80%',
     maxHeight: 80,
+    minHeight: 80,
     gap: 5
   },
   section: {

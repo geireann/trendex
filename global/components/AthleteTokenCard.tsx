@@ -20,7 +20,6 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
     setAthlete
   } = props;
 
-
   return (
     <TouchableOpacity style={styles.container} onPress={() => {
       setAthlete(athlete)
@@ -41,7 +40,7 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
             </Text>
         </View>
       </View>
-      <View style={styles.tokenContainer}>
+      {numberTokens !== 0 && <View style={styles.tokenContainer}>
         <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', maxHeight: 50}}>
           <Token amount={numberTokens}/>
           <Text style={styles.totalAmount}>
@@ -50,7 +49,7 @@ export const AthleteTokenCard = (props: IAthleteTokenCardProps) => {
         </View>
           {/* <Text style={styles.tokenLabel}>tokens</Text> */}
         
-      </View>
+      </View>}
       {/* <Icon name={"notifications-outline"} type={"ionicon"} color={Color.TEXT_ON_DARK}/> */}
     </TouchableOpacity>
   );
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: Color.GRAY_2,
     alignItems: 'flex-start',
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
     minHeight: 80,
     maxHeight: 80,
     borderColor: Color.VARIANT_2,
