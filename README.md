@@ -1,7 +1,8 @@
 # trendex
 
-Project: Converting Iterative Design Mockup to Functional Application
-Faculty Sponsor: Jeff Huang
+## Project: Converting Iterative Design Mockup to Functional Application
+
+## Faculty Sponsor: Jeff Huang
 
 # Overview
 Our Capstone is a cumulation of the skills we’ve learned throughout our Computer Science degrees, and involves a good deal of our own research into skills outside of class as well.
