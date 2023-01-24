@@ -1,5 +1,6 @@
 import { IUser, EmptyUser, MongoObject, TokenType} from "./global"
 import { get, post } from "./global/httpRequestUtils"
+import { decrypt } from './pages/login/Login'
 
 /** In development mode (locally) the server is at localhost:5000*/
 const development = true;
@@ -35,11 +36,11 @@ export const fetchUsers = async (): Promise<IUser[] | string> => {
 export const fetchUser = async(username : string, password: string) : Promise<[IUser, string]> => {
   try {
     console.log('fetch user: ', username, baseEndpoint + servicePath + 'user')
+    console.log('password' + password);
     let user = await post<MongoObject>(baseEndpoint + servicePath + 'user', {
       username: username,
-      password: password
     });
-    if (user.user != undefined) {
+    if (user.user != undefined && decrypt(user.user.password) == decrypt(password)) {
       return [user.user, "success"]
     } else {
       return [new EmptyUser(), "failed"]

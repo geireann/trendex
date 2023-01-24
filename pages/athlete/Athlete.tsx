@@ -48,7 +48,6 @@ export const Athlete = (props: IAthleteProps) => {
       );
     
     const buyToken = async (name : string) => {
-      debugger
         const newTokens = [...props.user.tokens]
         let updatedToken = new TokenType("", "", 0, 0, "", Sport.BASKETBALL)
         let tokenFound = false;
