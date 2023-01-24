@@ -92,20 +92,20 @@ let searchResults: AthleteType[] = athletes;
   }
 
   useEffect(() => {
-    // let countryFilter: NewsCountry | undefined = newsCountry;
-    // if (newsCountry === NewsCountry.All) countryFilter = undefined
-    // getNews(false, undefined, NewsCategory.SPORT, countryFilter)
-    //   .then((res: any) => {
-    //     console.log(res.articles)
-    //     setArticles(res.articles)
-    //     setArticlesLoaded(true)
-    //   })
-    //   .catch((e) => {
-    //     console.log(e.message)
-    //   })
+    let countryFilter: NewsCountry | undefined = newsCountry;
+    if (newsCountry === NewsCountry.All) countryFilter = undefined
+    getNews(false, undefined, NewsCategory.SPORT, countryFilter)
+      .then((res: any) => {
+        console.log(res.articles)
+        setArticles(res.articles)
+        setArticlesLoaded(true)
+      })
+      .catch((e) => {
+        console.log(e.message)
+      })
     
-    setArticles(dummyArticles)
-    setArticlesLoaded(true)
+    // setArticles(dummyArticles)
+    // setArticlesLoaded(true)
   },[newsCountry])
 
   const getTrendingAthletes = () => {

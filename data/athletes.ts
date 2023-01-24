@@ -122,6 +122,14 @@ export const athletes = [
         24.72,
         0
     ),
+    new AthleteType(
+      '16',
+      Sport.SQUASH,
+      "https://i.imgur.com/vOdmb0V.jpg",
+      'Chotoo Amin',
+      0.02,
+      0
+  ),
   ];
 
   // https://photoresources.wtatennis.com/photo-resources/2021/07/03/b81b3a09-f5f9-4b3e-ba47-60619cb2de5f/Emma_Raducanu_-_2021_Wimbledon_Championships_Day_6_-DSC_6581_original.jpg?width=1440
