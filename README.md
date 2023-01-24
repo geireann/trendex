@@ -30,7 +30,7 @@ The Investments page is where a user can see their current tokens and the total 
 The Athlete page pops up when the user clicks on a token. From here, they can buy or sell more tokens, or add/remove them from their watchlist. They can also see relevant news articles for that individual.
 
 ### News Article Fetching
-
+Using the News API (https://newsapi.org/) we were able to get the latest news articles, but we were also able to submit specific queries to get results for different countries and relevant to the particular athlete page that the user is currently on. 
 
 ### Discover
 Our discover page allows users to find new tokens to purchase, including the use of a search engine. The page shows news articles and trending athletes that the user might be interested in,
