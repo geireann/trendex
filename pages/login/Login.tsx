@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, View, Button, Image, Switch, Alert, TouchableOpacity, Text } from 'react-native';
+import { StyleSheet, View, Button, Image, Switch, Alert, TouchableOpacity, Text, Pressable } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { Color, FontSize, LoginInput, IUser, TokenType, Sport, globalStyles} from '../../global';
 import { createUser, fetchUser, fetchUsers} from '../../serverGateway';
@@ -43,17 +43,13 @@ export const Login = (props: ILoginProps) => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-
-  const toggleSwitch = () => {
-    setSignup(!isSignup);
-  }
-
   const staticImage = require("./trendex.png");
 
   const attemptLogIn = async (username: string, password: string) => {
     const encryptResult = encrypt(password);
     const result = await fetchUser(username, encryptResult);
     if (result[1] == "success") {
+      console.log("successful login")
       props.setUser(result[0])
     } else {
       Alert.alert('Alert Title', 'Username or Password Incorrect - Please Try Again', [
@@ -64,6 +60,14 @@ export const Login = (props: ILoginProps) => {
         },
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ])
+    }
+  }
+
+  const getMessage = () => {
+    if (!isSignup) {
+      return <Text style={styles.buttonSwitchText}>Already have an account? <Pressable onPress={() => {setSignup(true)}}><Text style={styles.button}>Sign In</Text></Pressable></Text>
+    } else {
+      return <Text style={styles.buttonSwitchText}>Don't have an account? <Pressable onPress={() => {setSignup(false)}}><Text style={styles.button}>Create Account</Text></Pressable></Text>
     }
   }
 
@@ -86,11 +90,18 @@ export const Login = (props: ILoginProps) => {
         value={password}
         secure={true}
       />
-      <Button
+      {/* <Button
         title="Login"
         onPress={() => attemptLogIn(username, password)}
         color={Color.VARIANT_1}
-      />
+      /> */}
+      <TouchableOpacity style={globalStyles.buttonV2}
+onPress={() => {attemptLogIn(username, password)}}
+        >
+            <Text style={globalStyles.buttonTextV2}>
+              Log In
+            </Text>
+        </TouchableOpacity>
       <Button
         title="Forgot Password"
         color={Color.GRAY_2}
@@ -122,36 +133,42 @@ export const Login = (props: ILoginProps) => {
           value={confirmPassword}
           secure={true}
         />
-        <Switch onValueChange={toggleSwitch} value={isSignup}></Switch>
-        <Button
-          title="Sign Up"
-          onPress={() => {
-            if (password == confirmPassword) {
-              createUser({
-                username: username.trim().toLowerCase(),
-                password: encrypt(password),
-                email: email,
-                balance: 300,
-                tokens: [],
-                watchlist: []
-              })
-              Alert.alert('Alert Title', 'Profile Successfully Created - Please Log In To Begin Trading', [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
-              ])
-            } else {
-              Alert.alert("Password do not match", "Passwords do not match")
-            }
-          }}
-          color={Color.VARIANT_1}
-        />
+        <TouchableOpacity style={globalStyles.buttonV2}
+
+onPress={() => {
+  if (password == confirmPassword) {
+    createUser({
+      username: username.trim().toLowerCase(),
+      password: encrypt(password),
+      email: email,
+      balance: 300,
+      tokens: [],
+      watchlist: []
+    })
+    Alert.alert('Alert Title', 'Profile Successfully Created - Please Log In To Begin Trading', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ])
+    attemptLogIn(username.trim().toLowerCase(), password);
+  } else {
+    Alert.alert("Password do not match", "Passwords do not match")
+  }
+}}
+        >
+            <Text style={globalStyles.buttonTextV2}>
+              Sign Up
+            </Text>
+        </TouchableOpacity>
       </View>
-        }
+      }
       <StatusBar hidden = {false} backgroundColor = {Color.GRAY_1} translucent = {true}/>
+      <View style={styles.switchText}>
+        {getMessage()}
+      </View>
     </View>
   );
 }
@@ -162,12 +179,12 @@ const styles = StyleSheet.create({
         backgroundColor: Color.GRAY_2,
         alignItems: 'center',
       justifyContent: 'center',
+      height: '100%',
       // marginTop: 30
     },
     formContainer: {
       alignItems: 'center',
       justifyContent: 'center',
-      gap: 10,
       width: '100%'
     },
     header: {
@@ -178,6 +195,21 @@ const styles = StyleSheet.create({
   image: {
     width: '65%',
     height: 100,
+    minHeight: 100,
+    maxHeight: 100,
     resizeMode: "contain",
+  },
+  button: {
+    color: Color.VARIANT_2
+  },
+  buttonSwitchText: {
+    color: Color.TEXT_ON_DARK_VARIANT
+  },
+  switchText: {
+    position: 'absolute',
+    justifySelf: 'flex-end',
+    alignSelf: 'center',
+    bottom: 20,
+    color: Color.TEXT_ON_DARK_VARIANT
   }
 });

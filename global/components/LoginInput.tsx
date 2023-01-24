@@ -32,20 +32,20 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'center',
     width: '80%',
-    maxHeight: 80,
-    minHeight: 80,
-    gap: 5
   },
   section: {
     display: 'flex',
     color: 'white',
     fontWeight: '300',
     fontSize: FontSize.SECTION,
+    marginBottom: 3,
 },
   input: {
       backgroundColor: Color.GRAY_4,
-      padding: 10,
+      paddingHorizontal: 10,
+      paddingVertical: 5,
       borderRadius: 100,
+      marginBottom: 20,
       width: '100%'
   },
 });
