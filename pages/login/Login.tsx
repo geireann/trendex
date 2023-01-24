@@ -13,14 +13,14 @@ const CryptoJS = require('crypto-js');
 //Crypto Source: https://stackoverflow.com/questions/48524452/base64-encoder-via-crypto-js
 
 //Encrypting text
-function encrypt(text: string) {
+export function encrypt(text: string) {
   const encodedWord = CryptoJS.enc.Utf8.parse(text); // encodedWord Array object
   const encoded = CryptoJS.enc.Base64.stringify(encodedWord)
   return encoded
 }
 
 // Decrypting text
-function decrypt(text: string) {
+export function decrypt(text: string) {
   const encodedWord = CryptoJS.enc.Base64.parse(text) // encodedWord via Base64.parse()
   const decoded = CryptoJS.enc.Utf8.stringify(encodedWord); // decode encodedWord via Utf8.stringify() '75322541'
   return decoded;
@@ -52,7 +52,7 @@ export const Login = (props: ILoginProps) => {
 
   const attemptLogIn = async (username: string, password: string) => {
     const encryptResult = encrypt(password);
-    const result = await fetchUser(username, encryptResult.encryptedData);
+    const result = await fetchUser(username, encryptResult);
     if (result[1] == "success") {
       props.setUser(result[0])
     } else {
@@ -73,7 +73,6 @@ export const Login = (props: ILoginProps) => {
         source={staticImage}
         style={styles.image}
       ></Image>
-      <Switch onValueChange={toggleSwitch} value={isSignup}></Switch>
       {isSignup ? <View style={styles.formContainer}>
       <LoginInput
         title={"Username"}
@@ -123,13 +122,14 @@ export const Login = (props: ILoginProps) => {
           value={confirmPassword}
           secure={true}
         />
+        <Switch onValueChange={toggleSwitch} value={isSignup}></Switch>
         <Button
           title="Sign Up"
           onPress={() => {
             if (password == confirmPassword) {
               createUser({
                 username: username.trim().toLowerCase(),
-                password: encrypt(password).encryptedData,
+                password: encrypt(password),
                 email: email,
                 balance: 300,
                 tokens: [],

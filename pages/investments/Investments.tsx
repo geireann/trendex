@@ -16,7 +16,6 @@ export const Investments = (props: InvestmentsProps) => {
   const [timeframe, setTimeframe] = useState<Timeframe>(Timeframe._1Y)
 
   const renderToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
-    // debugger
     const token = tokenInfo.item;
     console.log("Called getTokens" + token.name);
     const athlete: IAthlete = {
@@ -34,7 +33,6 @@ export const Investments = (props: InvestmentsProps) => {
   }
 
   const renderWatchlistToken = (tokenInfo: ListRenderItemInfo<TokenType> ) : any => {
-    // debugger
     const token = tokenInfo.item;
     const athlete: IAthlete = {
       id: token.id,
